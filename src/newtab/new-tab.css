@@ -1,0 +1,45 @@
+:root {
+    --icon-size: 72px;
+    --icon-gap-x: 30px;
+    --icon-gap-y: 30px;
+    --icon-width-full: calc(var(--icon-size) + var(--icon-gap-x));
+    --icon-border-radius: 12px;
+    --icon-text-size: calc(var(--icon-size) / 2 - 12px);
+}
+#app {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.nav-item-shadow:hover {
+    box-shadow: #0000004d 0 0 3px;
+}
+
+.content {
+    width: clamp(468px, 80vw, 1680px);
+    margin-inline: auto;
+    height: 100%;
+}
+
+.content-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--icon-width-full));
+    grid-auto-flow: dense;
+    gap: var(--icon-gap-y) var(--icon-gap-x);
+}
+.item-box {
+    width: 100%;
+    height: 100%;
+    color: white;
+    text-wrap: nowrap;
+}
+.item-icon {
+    width: calc(100% - var(--icon-gap-x));
+    aspect-ratio: 1 / 1;
+    margin-left: calc(var(--icon-gap-x) / 2);
+    border-radius: var(--icon-border-radius);
+    overflow: hidden;
+    background: center / cover;
+    font-size: var(--icon-text-size);
+}

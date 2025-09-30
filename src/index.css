@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@utility grid-cols-auto {
+    grid-template-columns: repeat(auto-fill, var(--icon-width-full));
+}
+
+@utility xy-center {
+    @apply flex items-center justify-center;
+}
+
+@utility no-spread-shadow-* {
+    box-shadow: oklch(0.81 0 0 / 0.56) 0 0 calc(--value(integer) * 1px);
+}
+
+@theme {
+    --color-primary: oklch(0.92 0 0);
+    --color-primary-bg: oklch(1 0 0);
+    --color-primary-fg: oklch(0.2 0 0);
+    --color-border: oklch(0.92 0 0);
+
+    --color-modal: oklch(0 0 0 / 0.6);
+}
+:root {
+    color: oklch(0.12 0 0);
+}
+:root.dark {
+    color: oklch(0.98 0 0);
+    --color-primary: oklch(0.2 0 0);
+    --color-primary-bg: oklch(0.2 0 0);
+    --color-primary-fg: oklch(0.95 0 0);
+    --color-border: oklch(0.14 0 0);
+}
+
+* {
+    border-color: var(--color-border);
+}
+
+.material-icons-outlined {
+    font-size: 1em;
+    line-height: inherit;
+    scale: 1.25;
+}
+
+.modal-enter-active,
+.modal-leave-active,
+.modal-enter-active > *,
+.modal-leave-active > * {
+    @apply transition-all duration-200 ease-out;
+}
+.modal-enter-from,
+.modal-leave-to {
+    @apply opacity-0;
+}
+.modal-enter-to,
+.modal-leave-from {
+    @apply opacity-100;
+}
+.modal-enter-from > *,
+.modal-leave-to > * {
+    @apply scale-85;
+}
+.modal-enter-to > *,
+.modal-leave-from > * {
+    @apply scale-100;
+}
