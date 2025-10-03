@@ -1,6 +1,6 @@
 <template>
     <div
-        class="leading-none mb-1 p-2.5 pr-1 hover:bg-white rounded-xl
+        class="leading-none mb-1 p-2.5 pr-1 hover:bg-primary hover:text-primary-fg rounded-xl
             cursor-pointer nav-item-shadow
             flex gap-x-2.5
         "
@@ -27,8 +27,7 @@
     >
         <div
             v-if="showChildren && hasChildren"
-            class="grid overflow-hidden"
-            :style="{ marginLeft: `${deepth * 12}px` }"
+            class="grid overflow-hidden ml-3"
         >
             <div class="min-h-0">
                 <side-item
@@ -44,13 +43,14 @@
 
 <script setup lang="ts">
 import { getFavicon, useContextMenu } from '@/utils'
-import { generateContextMenuItems } from '@/utils/bookmarks'
-import { isBookmarkFolder } from '@/utils/bookmarks'
+import { generateContextMenuItems } from '@/utils/chromeApi'
+import { isBookmarkFolder } from '@/utils/chromeApi'
+import type { BookmarkNode } from '@/utils/serviceWorker'
 import { computed, ref } from 'vue'
 const beginClass = 'grid-rows-[0fr]'
 const endClass = 'grid-rows-[1fr]'
 interface Props {
-    item: chrome.bookmarks.BookmarkTreeNode
+    item: BookmarkNode
     deepth?: number
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -73,7 +73,7 @@ const handleClick = (item: chrome.bookmarks.BookmarkTreeNode) => {
         showChildren.value = !showChildren.value
         return
     }
-    window.open(item.url!, '_blank')
+    chrome.tabs.create({ url: item.url })
 }
 const handleSideBarMenu = (e: PointerEvent, item: chrome.bookmarks.BookmarkTreeNode) => {
     e.preventDefault()

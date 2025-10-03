@@ -8,7 +8,8 @@
         "build": "vue-tsc -b && vite build",
         "type-check": "vue-tsc -b",
         "lint": "eslint --fix",
-        "lint-only": "eslint --quiet"
+        "lint-only": "eslint --quiet",
+        "postinstall": "node plugins/script.ts"
     },
     "dependencies": {
         "material-icons": "^1.13.14",

@@ -1,14 +1,20 @@
 export const initTheme = () => {
-    const colorScheme = matchMedia('(prefers-color-scheme: dark)')
-    if (colorScheme.matches) {
+    const drakScheme = matchMedia('(prefers-color-scheme: dark)')
+    if (drakScheme.matches) {
         document.documentElement?.classList.add('dark')
     }
-    colorScheme.addEventListener('change', (e: MediaQueryListEvent) => {
+    drakScheme.addEventListener('change', (e: MediaQueryListEvent) => {
         if (e.matches) {
             document.documentElement?.classList.add('dark')
             return
         }
-        document.documentElement?.classList.remove('dark')
+    })
+    const lightScheme = matchMedia('(prefers-color-scheme: light)')
+    lightScheme.addEventListener('change', (e: MediaQueryListEvent) => {
+        if (e.matches) {
+            document.documentElement?.classList.remove('dark')
+            return
+        }
     })
 }
 initTheme()

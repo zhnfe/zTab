@@ -32,17 +32,28 @@ export default defineManifest({
         js: ['src/content/main.ts'],
         matches: ['<all_urls>']
     }],
+    commands: {
+        openPopup: {
+            suggested_key: {
+                default: 'Alt+B'
+            },
+            description: '打开扩展弹出页'
+        },
+        _execute_action: {
+            suggested_key: {
+                default: 'Ctrl+B',
+                mac: 'Command+B'
+            },
+            description: '打开侧边栏'
+        }
+    },
     side_panel: {
         default_path: 'src/sidepanel/index.html'
     },
     web_accessible_resources: [
         {
             resources: [
-                '_favicon/*',
-                'assets/*',
-                'node_modules/.pnpm/material-icons@1.13.14/node_modules/material-icons/iconfont/*.woff',
-                'node_modules/.pnpm/material-icons@1.13.14/node_modules/material-icons/iconfont/*.woff2',
-                'node_modules/.pnpm/material-icons@1.13.14/node_modules/material-icons/iconfont/*.ttf'
+                '_favicon/*'
             ],
             matches: ['<all_urls>'],
             use_dynamic_url: true
@@ -51,5 +62,8 @@ export default defineManifest({
     host_permissions: [
         'https://*/*',
         'http://*/*'
-    ]
+    ],
+    background: {
+        service_worker: 'src/utils/serviceWorker.ts'
+    }
 })

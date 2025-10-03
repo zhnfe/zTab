@@ -29,12 +29,6 @@ export default defineConfig({
         }
     },
     server: {
-        proxy: {
-            // 这个无限递归了, 怎么解决?
-            '/_favicon': {
-                bypass: () => false
-            }
-        },
         cors: {
             origin: [
                 /chrome-extension:\/\//

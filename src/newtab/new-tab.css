@@ -9,7 +9,8 @@
 #app {
     height: 100vh;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 0fr 1fr;
+    background: url("@/assets/images/66.png") center/cover var(--color-bg);
 }
 
 .nav-item-shadow:hover {

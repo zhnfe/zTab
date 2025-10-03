@@ -66,3 +66,21 @@ export const getFavicon = (u?: string) => {
     url.searchParams.set('size', '64')
     return url.toString()
 }
+
+export const favorite = {
+    ids: [] as string[],
+    get(): string[] {
+        return JSON.parse(localStorage.getItem('favoriteIds') ?? '[]')
+    },
+    set(ids: string[]) {
+        localStorage.setItem('favoriteIds', JSON.stringify([...new Set(ids)]))
+    },
+    add(id: string) {
+        const ids = [id, ...this.get()]
+        this.set(ids)
+    },
+    delete(id: string) {
+        const current = this.get()
+        this.set(current.filter(item => item !== id))
+    }
+}

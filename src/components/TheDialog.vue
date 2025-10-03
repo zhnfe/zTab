@@ -58,14 +58,15 @@
     </transition>
 </template>
 <script setup lang="ts">
-import { initBookmarks, isBookmarkFolder } from '@/utils/bookmarks'
+import { initBookmarks, isBookmarkFolder } from '@/utils/chromeApi'
+import type { BookmarkNode } from '@/utils/serviceWorker'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 export interface DialogProps {
     title: string
     url?: string
     parentId?: string
     type: 'folder' | 'bookmark'
-    data?: chrome.bookmarks.BookmarkTreeNode
+    data?: BookmarkNode
 }
 const props = defineProps<DialogProps>()
 

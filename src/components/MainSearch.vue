@@ -1,53 +1,66 @@
 <template>
-    <div class="flex justify-center">
-        <div
-            class="w-180 bg-primary-bg no-spread-shadow-20 rounded-xl p-3 text-base"
-            @keydown="handleKeyDown"
-        >
-            <div class="flex items-center h-11 px-3">
+    <div class="w-180 h-fit bg-bg no-offset-shadow-20 border rounded-xl p-3 text-base">
+        <div class="flex items-center h-11 px-3">
+            <span
+                class="w-5.5 text-center px-1 material-icons-outlined mr-3 align-bottom"
+                style="scale: 1"
+            >
+                search
+            </span>
+            <input
+                ref="searchInput"
+                class="flex-1 leading-11 focus-visible:outline-0"
+                autocomplete="off"
+                tabindex="0"
+                name="zTab-MainSearch"
+                :value="state.query"
+                @input="onInput"
+                @compositionend="onCompositionEnd"
+                @keydown="handleKeyDown"
+            >
+        </div>
+        <hr class="border-border my-1.5" v-if="result.length">
+        <div class="max-h-62 overflow-y-auto" ref="resultContainer">
+            <!--
+                    hover:bg-gray-200 dark:hover:bg-gray-700
+                :class="index === state.curIndex ? 'bg-primary text-primary-fg' : ''"
+                -->
+            <div
+                v-for="item, index in result"
+                :key="item.url"
+                class="group flex items-center grid-cols rounded-md p-3 mb-1 text-sm
+                        cursor-pointer dark:hover:bg-amber-100/10 hover:bg-amber-500
+                    "
+                :style="index === state.curIndex
+                    ? {
+                        backgroundColor: 'var(--color-primary)',
+                        color: 'var(--color-primary-fg)'
+                    }
+                    : {}
+                "
+                @click="onItemConfirm(item)"
+            >
+                <img
+                    v-if="showFavicon(item)"
+                    class="w-5.5 p-1 mr-3 bg-bg rounded-sm"
+                    :src="getFavicon(item.url)"
+                >
                 <span
+                    v-else
                     class="w-5.5 text-center px-1 material-icons-outlined mr-3 align-bottom"
-                    style="scale: 1"
+                    style="scale: 1.14"
                 >
                     search
                 </span>
-                <input
-                    class="flex-1 leading-11 focus-visible:outline-0"
-                    contenteditable="true"
-                    autofocus="true"
-                    name="search"
-                    :value="state.query"
-                    @input="onInput"
-                    @compositionend="onCompositionEnd"
-                >
-            </div>
-            <hr class="border-border my-1.5">
-            <div class="max-h-62 overflow-y-auto" ref="resultContainer">
+                <div class="line-clamp-1 mr-5">{{ item.title }}</div>
                 <div
-                    v-for="item, index in result"
-                    :key="item.url"
-                    class="flex items-center grid-cols rounded-md p-3 mb-1 text-sm cursor-pointer hover:bg-gray-200 hover:text-black"
-                    :style="index === state.curIndex ? {backgroundColor: '#b7aa75', color: '#fff'} : {}"
-                    @click="handleResultItemClick(item)"
+                    class="text-desc ml-auto text-nowrap"
+                    :class="index === state.curIndex ? 'text-primary-desc' : ''"
                 >
-                    <img
-                        v-if="showFavicon(item)"
-                        class="w-5.5 p-1 mr-3 bg-white rounded-sm"
-                        :src="getFavicon(item.url)"
-                    >
-                    <span
-                        v-else
-                        class="w-5.5 text-center px-1 material-icons-outlined mr-3 align-bottom"
-                        style="scale: 1.14"
-                    >
-                        search
-                    </span>
-                    <div>{{ item.title }}</div>
-                    <div class="text-gray-700 ml-auto">
-                        <span v-if="item.tabId" class="ml-auto mr-2">转到此 Tab</span>
-                        <span v-else-if="item.isHistory">history</span>
-                        <span v-else-if="item.isBookmark">bookmark</span>
-                    </div>
+                    <span v-if="item.tabId">转到此 Tab</span>
+                    <span v-else-if="item.isHistory">history</span>
+                    <span v-else-if="item.isBookmark">bookmark</span>
+                    <span v-else-if="item.isEngine">{{ curSearchEngine.title }}</span>
                 </div>
             </div>
         </div>
@@ -55,8 +68,8 @@
 </template>
 <script setup lang="ts">
 import { getFavicon } from '@/utils'
-import { flattedBookmarks } from '@/utils/bookmarks'
-import { computed, reactive, useTemplateRef, watch } from 'vue'
+import { createTab, flattedBookmarks, getHistory, getTab, updateTab } from '@/utils/chromeApi'
+import { onMounted, reactive, ref, useTemplateRef, watch } from 'vue'
 
 const searchEngines = [
     {
@@ -67,8 +80,8 @@ const searchEngines = [
         title: 'Baidu',
         url: 'https://www.baidu.com/s?wd='
     }
-]
-const eachResultCount = 5
+] as const
+const curSearchEngine = searchEngines[0]
 
 interface Result {
     url: string
@@ -81,86 +94,73 @@ interface Result {
 
 const state = reactive({
     query: '',
-    curIndex: -1,
-    curSearchEngine: searchEngines[0]!
+    curIndex: -1
 })
 
-const results = reactive<Record<'bookmark' | 'history' | 'tab' | 'engine', Result[]>>({
-    bookmark: [],
-    history: [],
-    tab: [],
-    engine: []
-})
+const result = ref<Result[]>([])
+const resultContainer = useTemplateRef('resultContainer')
 
-const searchBookmark = (q: string) => {
-    results.bookmark = flattedBookmarks.value
-        .filter(item => item.title.toLowerCase().includes(q) || item.url.includes(q))
-        .slice(0, eachResultCount)
-        .map(item => ({
-            title: item.title,
-            url: item.url,
-            isBookmark: true
-        }))
+const searchBookmark = async (q: string) => {
+    if (!q) {
+        return []
+    }
+    return flattedBookmarks.value.reduce<Result[]>((acc, item) => {
+        if (item.title.toLowerCase().includes(q) || item.url.toLowerCase().includes(q)) {
+            acc.push({ title: item.title, url: item.url, isBookmark: true })
+        }
+        return acc
+    }, []).slice(0, 10)
 }
 const searchHistory = async (q: string) => {
-    const res = await chrome.history.search({ text: q, maxResults: eachResultCount })
-    results.history = res
-        .filter(item => !results.tab.some(tab => tab.url === item.url))
-        .map(item => ({ title: item.title!, url: item.url!, isHistory: true }))
+    const res = await getHistory({ text: q, maxResults: 15, startTime: 1735689600000 })
+    return res.map(item => ({ title: item.title!, url: item.url!, isHistory: true }))
 }
 const searchTab = async (q: string) => {
-    const tabs = await chrome.tabs.query({})
-    results.tab = tabs
-        .filter(item => {
-            if (!item.title || !item.url || item.active) {
-                return false
-            }
-            return item.title.toLowerCase().includes(q.toLowerCase()) || item.url.toLowerCase().includes(q.toLowerCase())
-        })
-        .map(item => ({ title: item.title!, url: item.url!, tabId: item.id })).slice(0, eachResultCount)
-    results.history = results.history.filter(item => !results.tab.some(tab => tab.url === item.url))
-}
-const resultContainer = useTemplateRef('resultContainer')
-const searchEngine = (q: string) => {
     if (!q) {
-        results.engine = []
-        return
+        return []
     }
-    const targetUrl = state.curSearchEngine.url + decodeURIComponent(q)
-    results.engine = [{
+    const tabs = await getTab()
+    return tabs.reduce<Result[]>((acc, item) => {
+        if (!item.title || !item.url || item.active) {
+            return acc
+        }
+        if (item.title.toLowerCase().includes(q) || item.url.toLowerCase().includes(q)) {
+            acc.push({ title: item.title!, url: item.url!, tabId: item.id })
+        }
+        return acc
+    }, []).slice(0, 8)
+}
+const searchEngine = async (q: string) => {
+    if (!q) {
+        return []
+    }
+    const targetUrl = curSearchEngine.url + decodeURIComponent(q)
+    return [{
         title: state.query,
         url: targetUrl,
         isEngine: true
     }]
 }
 
-const search = (q: string) => {
-    searchHistory(q)
-    searchBookmark(q)
-    searchTab(q)
-    searchEngine(q)
+const search = async (q: string) => {
+    const res = await Promise.all<Result[]>([searchEngine(q), searchBookmark(q), searchTab(q), searchHistory(q)])
+    // 根据url去重，时间复杂度on
+    const map = new Map<string, Result>()
+    res.flat().forEach(item => {
+        if (!map.has(item.url)) {
+            map.set(item.url, item)
+        }
+    })
+    result.value = Array.from(map.values())
 }
-search('')
 
-const result = computed(() => {
-    const { bookmark, history, tab, engine } = results
-    const res = [...tab, ...history, ...bookmark]
-    if (!res.length) {
-        return engine
-    }
-    res.splice(1, 0, ...engine)
-    return res
-})
-const curItem = computed(() => {
-    return result.value[state.curIndex] ?? { url: '', title: '' }
-})
 let isComposing = false
 const onInput = (e: InputEvent) => {
     const target = e.target as HTMLInputElement
     isComposing = e.isComposing
     state.query = target.value ?? ''
     state.curIndex = 0
-    const q = state.query.toLowerCase()
+    const q = state.query.toLowerCase().trim()
     search(q)
 }
 const onCompositionEnd = () => {
@@ -173,34 +173,39 @@ const showFavicon = (item: Result) => {
     return !!item.url
 }
 
-const onItemConfirm = () => {
-    if (curItem.value.tabId) {
-        chrome.tabs.update(curItem.value.tabId, { active: true })
+const onItemConfirm = (item?: Result) => {
+    if (!item) {
         return
     }
-    if (!state.query) {
+    if (item.tabId) {
+        updateTab(item.tabId, { active: true })
         return
     }
-    window.open(curItem.value.url, '_blank')
+    createTab({ url: item.url })
 }
 const handleKeyDown = (e: KeyboardEvent) => {
     if (isComposing) {
         return
     }
-    if (e.key === 'ArrowUp' && state.curIndex > 0) {
+    if (['ArrowUp', 'ArrowDown', 'Enter', 'Tab'].includes(e.key)) {
+        e.preventDefault()
+    }
+    e.stopImmediatePropagation()
+    if ((e.key === 'ArrowUp' || (e.key === 'Tab' && e.shiftKey)) && state.curIndex > 0) {
         state.curIndex--
     }
-    if (e.key === 'ArrowDown' && state.curIndex < result.value.length - 1) {
+    if ((e.key === 'ArrowDown' || (e.key === 'Tab' && !e.shiftKey)) && state.curIndex < result.value.length - 1) {
         state.curIndex++
     }
-    if (e.key === 'Enter' && curItem.value.url) {
-        e.preventDefault()
-        onItemConfirm()
+    if (e.key === 'Enter') {
+        onItemConfirm(result.value[state.curIndex])
     }
 }
-const handleResultItemClick = (item: Result) => {
-    window.open(item.url, '_blank')
-}
+const searchInput = useTemplateRef('searchInput')
+onMounted(() => {
+    searchInput.value?.focus()
+    search('')
+})
 watch(() => state.curIndex, i => {
     if (!resultContainer.value) {
         return
