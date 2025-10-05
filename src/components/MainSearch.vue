@@ -116,9 +116,6 @@ const searchHistory = async (q: string) => {
     return res.map(item => ({ title: item.title!, url: item.url!, isHistory: true }))
 }
 const searchTab = async (q: string) => {
-    if (!q) {
-        return []
-    }
     const tabs = await getTab()
     return tabs.reduce<Result[]>((acc, item) => {
         if (!item.title || !item.url || item.active) {

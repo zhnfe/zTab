@@ -9,30 +9,34 @@
         "type-check": "vue-tsc -b",
         "lint": "eslint --fix",
         "lint-only": "eslint --quiet",
-        "postinstall": "node plugins/script.ts"
+        "postinstall": "node plugins/script.ts && simple-git-hooks"
     },
     "dependencies": {
         "material-icons": "^1.13.14",
-        "vue": "^3.5.17"
+        "vue": "^3.5.22",
+        "vue-draggable-plus": "^0.6.0"
     },
     "devDependencies": {
         "@crxjs/vite-plugin": "^2.2.0",
         "@stylistic/eslint-plugin": "^5.4.0",
         "@tailwindcss/vite": "^4.1.13",
         "@tsconfig/node24": "^24.0.1",
-        "@types/chrome": "^0.1.1",
+        "@types/chrome": "^0.1.22",
         "@types/node": "^24.0.15",
         "@vitejs/plugin-vue": "^6.0.0",
         "@vue/eslint-config-typescript": "^14.6.0",
         "@vue/tsconfig": "^0.8.1",
         "eslint": "^9.36.0",
         "eslint-plugin-vue": "^10.5.0",
+        "simple-git-hooks": "^2.13.1",
         "tailwindcss": "^4.1.13",
         "typescript": "~5.8.3",
-        "vite": "^7.0.5",
+        "vite": "^7.1.9",
         "vite-plugin-vue-devtools": "^8.0.2",
         "vite-plugin-zip-pack": "^1.2.4",
-        "vue-draggable-plus": "^0.6.0",
-        "vue-tsc": "^3.0.3"
+        "vue-tsc": "^3.1.0"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "npm run type-check && npm run lint"
     }
 }

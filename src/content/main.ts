@@ -4,7 +4,7 @@ import fontUrl from '@/assets/material-icons-outlined.woff2'
 import App from './App.vue'
 import '@/store'
 
-console.log('[CRXJS] Hello world from content script!)')
+console.info('ztab...')
 
 // 动态创建的link标签不能自动引入 @fontface 引入的字体文件，需要手动加载
 const font = new FontFace('Material Icons Outlined', `url(${chrome.runtime.getURL(fontUrl)})`)

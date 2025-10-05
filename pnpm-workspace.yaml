@@ -1,6 +1,7 @@
 ignoredBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
+  - simple-git-hooks
 
 patchedDependencies:
   '@crxjs/vite-plugin': patches/@crxjs__vite-plugin.patch

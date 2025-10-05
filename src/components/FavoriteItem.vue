@@ -2,11 +2,11 @@
     <div
         v-for="item in favorites"
         :key="item.id"
-        class="xy-center bg-blue-400/30 rounded-xl cursor-pointer"
+        class="xy-center bg-gray-950/4 hover:bg-gray-950/8 rounded-xl cursor-pointer"
         @click="handleClick(item)"
         @contextmenu="(e) => handleSideBarMenu(e, item)"
     >
-        <div class="w-6 h-6 rounded-md overflow-hidden">
+        <div class="w-5 h-5 rounded-md overflow-hidden">
             <img :src="getFavicon(item.url)">
         </div>
     </div>

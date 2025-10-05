@@ -1,6 +1,6 @@
 <template>
     <div
-        class="leading-none mb-1 p-2.5 pr-1 hover:bg-primary hover:text-primary-fg rounded-xl
+        class="leading-none mb-1 p-2.5 pr-1 mx-2 hover:bg-primary hover:text-primary-fg rounded-xl
             cursor-pointer nav-item-shadow
             flex gap-x-2.5
         "
