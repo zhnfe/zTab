@@ -2,7 +2,8 @@
     <div
         v-for="item in favorites"
         :key="item.id"
-        class="xy-center bg-gray-950/4 hover:bg-gray-950/8 rounded-xl cursor-pointer"
+        draggable="true"
+        class="xy-center bg-gray-400/10 hover:bg-gray-400/20 rounded-xl cursor-pointer"
         @click="handleClick(item)"
         @contextmenu="(e) => handleSideBarMenu(e, item)"
     >
@@ -15,10 +16,16 @@
 import { flattedBookmarks, generateContextMenuItems } from '@/utils/chromeApi'
 import { computed } from 'vue'
 import { favorite, getFavicon, useContextMenu } from '@/utils'
+import type { BookmarkNode } from '@/utils/serviceWorker'
 const favorites = computed(() => {
     const favoriteIds: string[] = favorite.get()
-    const res = flattedBookmarks.value.filter(b => favoriteIds.includes(b.id))
-    return res
+    return favoriteIds.reduce<BookmarkNode[]>((acc, id) => {
+        const node = flattedBookmarks.value.find(b => b.id === id)
+        if (node) {
+            acc.push(node)
+        }
+        return acc
+    }, [])
 })
 const handleClick = (item: chrome.bookmarks.BookmarkTreeNode) => {
     chrome.tabs.create({ url: item.url })

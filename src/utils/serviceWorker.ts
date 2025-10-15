@@ -90,6 +90,6 @@ chrome.runtime.onMessage.addListener((
 // 弹出页
 chrome.commands.onCommand.addListener(command => {
     if (command === 'openPopup') {
-        chrome.tabs.create({ url: 'src/popup/index.html' })
+        chrome.tabs.create({ url: 'src/sidepanel/index.html' })
     }
 })

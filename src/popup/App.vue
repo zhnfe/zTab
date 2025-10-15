@@ -1,7 +1,7 @@
 <template>
     <h1 class="text-red-700 text-2xl">
         <span>aljsdkfjlsadjlkfjlk</span>
-        <span class="material-icons-outlined">search</span>
+        <span class="mio">search</span>
     </h1>
 </template>
 

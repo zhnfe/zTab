@@ -12,7 +12,7 @@
                 @click="item.onClick"
                 v-if="'title' in item"
             >
-                <span class="material-icons-outlined mr-2">{{ item.icon }}</span>
+                <span class="mio mr-2">{{ item.icon }}</span>
                 <span>{{ item.title }}</span>
             </div>
             <hr v-else class="border-gray-200 my-1">

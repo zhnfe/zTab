@@ -2,7 +2,7 @@
     <div class="w-180 h-fit bg-bg no-offset-shadow-20 border rounded-xl p-3 text-base">
         <div class="flex items-center h-11 px-3">
             <span
-                class="w-5.5 text-center px-1 material-icons-outlined mr-3 align-bottom"
+                class="w-5.5 text-center px-1 mio mr-3 align-bottom"
                 style="scale: 1"
             >
                 search
@@ -47,7 +47,7 @@
                 >
                 <span
                     v-else
-                    class="w-5.5 text-center px-1 material-icons-outlined mr-3 align-bottom"
+                    class="w-5.5 text-center px-1 mio mr-3 align-bottom"
                     style="scale: 1.14"
                 >
                     search

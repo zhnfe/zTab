@@ -76,11 +76,33 @@ export const favorite = {
         localStorage.setItem('favoriteIds', JSON.stringify([...new Set(ids)]))
     },
     add(id: string) {
-        const ids = [id, ...this.get()]
+        const ids = [...this.get(), id]
         this.set(ids)
     },
     delete(id: string) {
         const current = this.get()
         this.set(current.filter(item => item !== id))
+    }
+}
+type StyleProperties = Exclude<
+    keyof CSSStyleDeclaration,
+    'length' | 'parentRule' | number | typeof Symbol.iterator
+>
+export function css(el: HTMLElement, style: StyleProperties, value: string): void
+export function css(el: HTMLElement, style: Partial<Record<StyleProperties, string>>): void
+
+// 函数实现
+export function css(
+    el: HTMLElement,
+    style: StyleProperties | Partial<Record<StyleProperties, string>>,
+    value?: string
+): void {
+    if (typeof style === 'string') {
+        if (value) {
+            el.style.setProperty(style, value)
+        }
+    }
+    else {
+        Object.assign(el.style, style)
     }
 }
