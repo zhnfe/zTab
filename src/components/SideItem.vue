@@ -6,7 +6,7 @@
         @contextmenu="(e) => handleSideBarMenu(e, bookmark)"
     >
         <div
-            class="flex py-2.5 px-2.5 gap-x-2.5 rounded-xl hover:bg-primary hover:text-primary-fg hover:opacity-80"
+            class="flex items-center py-2.5 px-2.5 gap-x-2.5 rounded-xl hover:bg-primary hover:text-primary-fg hover:opacity-80"
             draggable="true"
             @dragstart="onDragStart"
             @dragenter="onDragEnter"
@@ -16,8 +16,8 @@
             @drop="onDrop"
         >
             <span>{{ indexes.at(-1) }}</span>
-            <div class="w-3.5 aspect-square flex-none rounded-xs overflow-hidden">
-                <span v-if="isFolderItem" class="mio">folder</span>
+            <div class="w-3.5 aspect-square flex-none rounded-xs">
+                <IconFolder v-if="isFolderItem" />
                 <img
                     v-else
                     draggable="false"
@@ -25,7 +25,7 @@
                     @error="handleIconLoadedError"
                 >
             </div>
-            <div class="h-auto line-clamp-1">{{ bookmark.title }}</div>
+            <div class="line-clamp-1">{{ bookmark.title }}</div>
         </div>
         <transition
             enter-active-class="transition-all duration-200 ease-out"
@@ -53,9 +53,9 @@
 </template>
 
 <script setup lang="ts">
-import { getFavicon, useContextMenu } from '@/utils'
-import { generateContextMenuItems } from '@/utils/chromeApi'
+import { getFavicon } from '@/utils'
 import { isBookmarkFolder } from '@/utils/chromeApi'
+import { generateContextMenuItems, useContextMenu } from '@/utils/commandComponents'
 import { dragState } from '@/utils/drag'
 import type { BookmarkNode } from '@/utils/serviceWorker'
 import { computed, inject, ref } from 'vue'

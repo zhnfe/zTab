@@ -13,6 +13,8 @@ release
 dist-ssr
 *.local
 .local
+src/.icons
+src/globalIconComponents.d.ts
 
 # Editor directories and files
 .idea

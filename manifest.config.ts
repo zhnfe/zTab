@@ -35,8 +35,7 @@ export default defineManifest({
     commands: {
         openPopup: {
             suggested_key: {
-                default: 'Alt+B',
-                mac: 'Ctrl+B'
+                default: 'Alt+B'
             },
             description: '打开扩展弹出页'
         },

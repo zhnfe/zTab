@@ -1,5 +1,4 @@
 import type { BookmarkNode } from './serviceWorker'
-
 interface DragState {
     source: {
         el?: HTMLElement

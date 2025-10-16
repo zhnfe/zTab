@@ -15,9 +15,9 @@ const rootPath = process.cwd()
 const componentTemplate = '<template>@@svg@@</template>'
 const typeTemplate = `import type { DefineComponent } from 'vue'
 declare module 'vue' {
-  export interface GlobalComponents {
-    @@types@@
-  }
+    export interface GlobalComponents {
+        @@types@@
+    }
 }
 `
 

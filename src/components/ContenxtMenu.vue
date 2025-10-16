@@ -8,11 +8,11 @@
             :key="index"
         >
             <div
-                class="flex rounded-xl hover:bg-primary hover:text-primary-fg cursor-pointer px-3 py-2 min-w-50"
+                class="flex items-center gap-2 rounded-xl hover:bg-primary hover:text-primary-fg cursor-pointer px-3 py-2 min-w-50"
                 @click="item.onClick"
                 v-if="'title' in item"
             >
-                <span class="mio mr-2">{{ item.icon }}</span>
+                <component :is="item.icon" />
                 <span>{{ item.title }}</span>
             </div>
             <hr v-else class="border-gray-200 my-1">
@@ -20,13 +20,8 @@
     </div>
 </template>
 <script setup lang="ts">
-export type ContextItem = {
-    title: string
-    icon: string
-    onClick: () => void
-} | {
-    divider: boolean
-}
+import type { ContextItem } from '@/utils/commandComponents'
+
 interface Props {
     items: ContextItem[]
     position: {
@@ -35,8 +30,7 @@ interface Props {
     }
 }
 defineProps<Props>()
-
 const emit = defineEmits(['close'])
-document.addEventListener('click', () => emit('close'), { once: true })
+document.addEventListener('click', () => emit('close'), { once: true, capture: true })
 document.addEventListener('contextmenu', () => emit('close'), { once: true, capture: true })
 </script>

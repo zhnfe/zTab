@@ -1,12 +1,7 @@
 <template>
     <div class="w-180 h-fit bg-bg no-offset-shadow-20 border rounded-xl p-3 text-base">
-        <div class="flex items-center h-11 px-3">
-            <span
-                class="w-5.5 text-center px-1 mio mr-3 align-bottom"
-                style="scale: 1"
-            >
-                search
-            </span>
+        <div class="flex items-center h-11 px-3 gap-3">
+            <icon-search />
             <input
                 ref="searchInput"
                 class="flex-1 leading-11 focus-visible:outline-0"
@@ -28,7 +23,7 @@
             <div
                 v-for="item, index in result"
                 :key="item.url"
-                class="group flex items-center grid-cols rounded-md p-3 mb-1 text-sm
+                class="group flex items-center gap-3 rounded-md p-3 mb-1 text-sm
                         cursor-pointer dark:hover:bg-amber-100/10 hover:bg-amber-500
                     "
                 :style="index === state.curIndex
@@ -42,16 +37,10 @@
             >
                 <img
                     v-if="showFavicon(item)"
-                    class="w-5.5 p-1 mr-3 bg-bg rounded-sm"
+                    class="w-5.5 p-1 bg-bg rounded-sm"
                     :src="getFavicon(item.url)"
                 >
-                <span
-                    v-else
-                    class="w-5.5 text-center px-1 mio mr-3 align-bottom"
-                    style="scale: 1.14"
-                >
-                    search
-                </span>
+                <icon-search class="w-5.5 h-5.5 p-0.5" v-else />
                 <div class="line-clamp-1 mr-5">{{ item.title }}</div>
                 <div
                     class="text-desc ml-auto text-nowrap"

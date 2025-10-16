@@ -1,33 +1,5 @@
-import ContenxtMenu, { type ContextItem } from '@/components/ContenxtMenu.vue'
-import TheDialog, { type DialogProps } from '@/components/TheDialog.vue'
-import { h, render } from 'vue'
-
 export const getRandomColor = () => {
     return '#' + Math.floor(Math.random() * 16777215).toString(16)
-}
-
-export const useContextMenu = (position: { x: number, y: number }, items: ContextItem[]) => {
-    const div = document.createElement('div')
-    render(
-        h(ContenxtMenu, {
-            items,
-            position,
-            onClose() {
-                div.remove()
-            }
-        }),
-        div
-    )
-    document.body.appendChild(div)
-}
-export const useDialog = (props: DialogProps) => {
-    const div = document.createElement('div')
-    const vm = h(TheDialog, {
-        ...props,
-        onClose: () => div.remove()
-    })
-    render(vm, div)
-    document.body.appendChild(div)
 }
 
 /**

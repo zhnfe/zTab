@@ -4,6 +4,7 @@
         "vite.config.*",
         "eslint.config.*",
         "plugins/*",
+        "scripts/*",
         "manifest.config.*"
     ],
     "compilerOptions": {

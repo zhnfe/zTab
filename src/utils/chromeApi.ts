@@ -1,6 +1,4 @@
-import type { ContextItem } from '@/components/ContenxtMenu.vue'
 import { computed, ref } from 'vue'
-import { favorite, useDialog } from '.'
 import type { BookmarkNode, MessageRequest, MessageResponse } from './serviceWorker'
 
 /**
@@ -70,116 +68,12 @@ export const updateTab = (tabId: number, option: chrome.tabs.UpdateProperties) =
 export const createTab = (option: chrome.tabs.CreateProperties) => {
     return sendMessage({ action: 'createTab', option })
 }
-const deleteBookmark = (bookmark: BookmarkNode) => {
+export const deleteBookmark = (bookmark: BookmarkNode) => {
     const api = bookmark.children ? 'removeTree' : 'remove'
     if (confirm('确定删除吗?')) {
         chrome.bookmarks[api](bookmark.id)
         initBookmarks()
     }
-}
-
-export const generateContextMenuItems = (bookmark: BookmarkNode, isFavorite?: boolean): ContextItem[] => {
-    if (isBookmarkFolder(bookmark)) {
-        return [
-            {
-                title: '打开所有书签',
-                icon: 'open_in_browser',
-                onClick() {
-                    bookmark.children?.forEach(item => {
-                        window.open(item.url!, '_blank')
-                    })
-                }
-            },
-            {
-                title: '添加书签',
-                icon: 'bookmark_add',
-                onClick() {
-                    useDialog({
-                        title: '新建书签',
-                        type: 'bookmark',
-                        data: bookmark
-                    })
-                }
-            },
-            {
-                title: '删除',
-                icon: 'delete',
-                onClick: () => deleteBookmark(bookmark)
-            }
-        ]
-    }
-    return [
-        {
-            title: '在新标签页中打开',
-            icon: 'open_in_browser',
-            onClick() {
-                chrome.tabs.create({ url: bookmark.url })
-            }
-        },
-        {
-            title: '在新窗口中打开',
-            icon: 'open_in_new',
-            onClick() {
-                chrome.windows.create({
-                    url: bookmark.url!,
-                    type: 'normal'
-                })
-            }
-        },
-        {
-            title: '在无痕窗口中打开',
-            icon: 'visibility_off',
-            onClick() {
-                chrome.windows.create({
-                    url: bookmark.url!,
-                    incognito: true
-                })
-            }
-        },
-        { divider: true },
-        {
-            title: '编辑',
-            icon: 'edit',
-            onClick() {
-                useDialog({
-                    title: '编辑书签',
-                    type: 'bookmark',
-                    data: bookmark
-                })
-            }
-        },
-        {
-            title: '删除',
-            icon: 'delete',
-            onClick: () => deleteBookmark(bookmark)
-        },
-        { divider: true },
-        {
-            title: isFavorite ? '移除收藏' : '加入收藏',
-            icon: 'star',
-            onClick() {
-                if (isFavorite) {
-                    favorite.delete(bookmark.id)
-                }
-                else {
-                    favorite.add(bookmark.id)
-                }
-                initBookmarks()
-            }
-        },
-        {
-            title: '复制链接',
-            icon: 'content_copy',
-            onClick() {
-            }
-        },
-        {
-            title: '创建二维码',
-            icon: 'qr_code',
-            onClick() {
-            }
-        }
-    ]
 }
 
 export const getHistory = (query: chrome.history.HistoryQuery) => {

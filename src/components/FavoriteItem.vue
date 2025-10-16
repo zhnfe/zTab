@@ -13,10 +13,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import { flattedBookmarks, generateContextMenuItems } from '@/utils/chromeApi'
+import { flattedBookmarks } from '@/utils/chromeApi'
 import { computed } from 'vue'
-import { favorite, getFavicon, useContextMenu } from '@/utils'
+import { favorite, getFavicon } from '@/utils'
 import type { BookmarkNode } from '@/utils/serviceWorker'
+import { generateContextMenuItems, useContextMenu } from '@/utils/commandComponents'
+
 const favorites = computed(() => {
     const favoriteIds: string[] = favorite.get()
     return favoriteIds.reduce<BookmarkNode[]>((acc, id) => {
