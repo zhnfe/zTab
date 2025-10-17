@@ -14,7 +14,7 @@ export default [
     {
         name: 'app/files-to-ignore',
         ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/.nuxt/**',
-            'src/components/icons/**', '**/.local/**', 'src/globalIconComponents.d.ts'
+            '.local', 'src/globalIconComponents.d.ts', 'src/.icons'
         ]
     },
     ...vueConfig,
@@ -77,7 +77,8 @@ export default [
             'vue/multi-word-component-names': 'off',
             'vue/block-lang': ['error', {
                 script: { lang: ['ts', 'tsx'] }
-            }]
+            }],
+            'vue/component-name-in-template-casing': ['error', 'PascalCase', {}]
         }
     }
 ]

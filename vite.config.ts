@@ -10,7 +10,6 @@ import manifest from './manifest.config.ts'
 import { name, version } from './package.json'
 import Components from 'unplugin-vue-components/vite'
 import { makeIconResolve } from './plugins/makeIcon.ts'
-
 export default defineConfig({
     resolve: {
         alias: {
@@ -24,14 +23,28 @@ export default defineConfig({
         Components({
             dts: 'src/globalIconComponents.d.ts',
             dirs: [],
-            include: [/\.vue$/, /\.vue\?vue/, /\.vue\.[tj]sx?\?vue/, /\.[tj]sx$/],
+            include: [/\.vue/, /\.[jt]sx/],
             resolvers: [makeIconResolve({ modulePath: 'node_modules/@material-symbols/svg-400/outlined', typeFilePath: '' })]
         }),
         tailwindcss(),
-        zip({ outDir: 'release', outFileName: `${name}-${version}.zip` })
+        zip({ outDir: 'release', outFileName: `${name}-${version}.zip` }),
         // vueDevTools()
+        {
+            name: 'exit-process',
+            apply: 'build',
+            enforce: 'post',
+            closeBundle() {
+                process.exit(0)
+            },
+            buildEnd(error) {
+                if (error) {
+                    process.exit(1)
+                }
+            }
+        }
     ],
     build: {
+        target: 'esnext',
         rollupOptions: {
             input: {
                 newtab: 'src/newtab/index.html'

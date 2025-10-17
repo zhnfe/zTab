@@ -5,7 +5,7 @@ import SideBar from '@/components/SideBar.vue'
 </script>
 
 <template>
-    <side-bar
+    <SideBar
         :style="{
             // backgroundColor: setting.sidebar.bgColor,
             position: 'fixed',

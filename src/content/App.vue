@@ -8,7 +8,7 @@
             :style="style"
             @click="close"
         >
-            <main-search />
+            <MainSearch />
         </div>
     </transition>
 </template>

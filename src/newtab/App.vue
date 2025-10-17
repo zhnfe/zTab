@@ -9,7 +9,7 @@
         <!-- <side-bar /> -->
     </div>
     <div class="flex justify-center mt-[25vh]">
-        <main-search />
+        <MainSearch />
     </div>
 </template>
 

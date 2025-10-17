@@ -27,7 +27,7 @@
             </div>
             <div class="line-clamp-1">{{ bookmark.title }}</div>
         </div>
-        <transition
+        <Transition
             enter-active-class="transition-all duration-200 ease-out"
             :enter-from-class="beginClass"
             :enter-to-class="endClass"
@@ -40,7 +40,7 @@
                 class="grid overflow-hidden ml-3"
             >
                 <div class="min-h-0">
-                    <side-item
+                    <SideItem
                         v-for="child, i in bookmark.children"
                         :key="child.id"
                         :bookmark="child"
@@ -48,7 +48,7 @@
                     />
                 </div>
             </div>
-        </transition>
+        </Transition>
     </div>
 </template>
 

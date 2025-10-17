@@ -36,7 +36,6 @@ const defualtResolveOptions: MakeResolveOptions = {
     typeFilePath: 'src/globalIconComponents.d.ts'
 }
 
-let watcher: FSWatcher | null = null
 export const makeIconResolve = (initOptions: Partial<MakeResolveOptions> = {}) => {
     const options = Object.assign(defualtResolveOptions, initOptions)
     if (!options.customPath && !options.modulePath) {
@@ -50,6 +49,7 @@ export const makeIconResolve = (initOptions: Partial<MakeResolveOptions> = {}) =
             files.set(name, resolve(rootPath, targetPath, file))
         }
     }
+    let watcher: FSWatcher | null = null
     if (options.customPath) {
         const customPath = resolve(rootPath, options.customPath)
         mkdirSync(customPath, { recursive: true })
