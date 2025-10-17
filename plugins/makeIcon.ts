@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, watch, writeFileSync, type FSWatcher } from 'fs'
 import { writeFile } from 'fs/promises'
-import { resolve } from 'path'
+import { resolve, sep } from 'path'
 
 const toCamelCase = (str: string) => {
     return str
@@ -85,7 +85,7 @@ export const makeIconResolve = (initOptions: Partial<MakeResolveOptions> = {}) =
         if (!name.startsWith(options.prefix) || !files.has(name)) {
             return
         }
-        const componentPath = resolve(targetPath, `${name}.vue`)
+        const componentPath = resolve(targetPath, `${name}.vue`).replaceAll(sep, '/')
         if (existsSync(componentPath)) {
             return componentPath
         }

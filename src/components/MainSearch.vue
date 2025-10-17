@@ -1,7 +1,7 @@
 <template>
     <div class="w-180 h-fit bg-bg no-offset-shadow-20 border rounded-xl p-3 text-base">
         <div class="flex items-center h-11 px-3 gap-3">
-            <icon-search />
+            <IconSearch />
             <input
                 ref="searchInput"
                 class="flex-1 leading-11 focus-visible:outline-0"
@@ -40,7 +40,7 @@
                     class="w-5.5 p-1 bg-bg rounded-sm"
                     :src="getFavicon(item.url)"
                 >
-                <icon-search class="w-5.5 h-5.5 p-0.5" v-else />
+                <IconSearch class="w-5.5 h-5.5 p-0.5" v-else />
                 <div class="line-clamp-1 mr-5">{{ item.title }}</div>
                 <div
                     class="text-desc ml-auto text-nowrap"

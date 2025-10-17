@@ -33,4 +33,7 @@
         "*.css": "tailwindcss"
     },
     "prettier.tabWidth": 4,
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
 }

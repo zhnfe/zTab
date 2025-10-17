@@ -1,5 +1,5 @@
 import { deleteBookmark, initBookmarks, isBookmarkFolder } from './chromeApi.ts'
-import { render, type DefineComponent, type VNode } from 'vue'
+import { render, type VNode } from 'vue'
 import TheDialog from '@/components/TheDialog.vue'
 import ContenxtMenu from '@/components/ContenxtMenu.vue'
 import { favorite } from '.'
@@ -21,15 +21,15 @@ export type ContextItem = {
 }
 
 // #region generateContextMenuItems
-declare const IconOpenInBrowser: DefineComponent<object>
-declare const IconBookmarkAdd: DefineComponent<object>
-declare const IconDelete: DefineComponent<object>
-declare const IconOpenInNew: DefineComponent<object>
-declare const IconIncognito: DefineComponent<object>
-declare const IconEdit: DefineComponent<object>
-declare const IconStar: DefineComponent<object>
-declare const IconContentCopy: DefineComponent<object>
-declare const IconQrCode: DefineComponent<object>
+declare const IconOpenInBrowser: Icon
+declare const IconBookmarkAdd: Icon
+declare const IconDelete: Icon
+declare const IconOpenInNew: Icon
+declare const IconIncognito: Icon
+declare const IconEdit: Icon
+declare const IconStar: Icon
+declare const IconContentCopy: Icon
+declare const IconQrCode: Icon
 export const generateContextMenuItems = (bookmark: BookmarkNode, isFavorite?: boolean): ContextItem[] => {
     if (isBookmarkFolder(bookmark)) {
         return [

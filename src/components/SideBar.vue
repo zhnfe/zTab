@@ -20,7 +20,6 @@
             </div>
         </nav>
     </aside>
-    <MainSearch />
 </template>
 <script setup lang="ts">
 import { bookmarks } from '@/utils/chromeApi'

@@ -3,7 +3,7 @@
         class="leading-none pb-1 px-2 cursor-pointer nav-item-shadow"
         :style="{transition: dragState.transition}"
         @click.stop="handleClick(bookmark)"
-        @contextmenu="(e) => handleSideBarMenu(e, bookmark)"
+        @contextmenu="handleSideBarMenu($event, bookmark)"
     >
         <div
             class="flex items-center py-2.5 px-2.5 gap-x-2.5 rounded-xl hover:bg-primary hover:text-primary-fg hover:opacity-80"

@@ -5,12 +5,5 @@ import SideBar from '@/components/SideBar.vue'
 </script>
 
 <template>
-    <SideBar
-        :style="{
-            // backgroundColor: setting.sidebar.bgColor,
-            position: 'fixed',
-            inset: '0'
-        }"
-        hide-slider="true"
-    />
+    <SideBar />
 </template>
