@@ -1,9 +1,9 @@
 <template>
-    <aside class="text-sm py-5 bg-bg select-none h-full">
+    <aside class="text-sm py-5 select-none h-screen overflow-hidden flex flex-col">
         <div class="grid grid-autofill-90 grid-auto-rows-48 gap-2 px-2">
             <FavoriteItem />
         </div>
-        <nav class="flex-1 h-full pt-5 overflow-x-hidden overflow-y-auto relative">
+        <nav class="flex-1 mt-5 overflow-x-hidden overflow-y-auto relative">
             <SideItem
                 v-for="item, index in bookmarks"
                 :key="item.id"

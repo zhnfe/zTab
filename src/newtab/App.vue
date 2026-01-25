@@ -8,8 +8,10 @@
         <SideBar />
         <div ref="sidebarResizer" class="cursor-col-resize grow-0 hover:bg-amber-200 transition-all"></div>
     </div>
-    <div class="flex justify-center items-center">
-        <MainSearch />
+    <div class="p-3 pl-0 overflow-hidden">
+        <div class="h-full rounded-md flex justify-center items-center" :style="{backgroundImage: `url(${setting.bgImage})`}">
+            <MainSearch />
+        </div>
     </div>
 </template>
 
@@ -18,9 +20,6 @@ import { setting } from '@/store'
 import MainSearch from '@/components/MainSearch.vue'
 import SideBar from '@/components/SideBar.vue'
 import { onMounted, useTemplateRef } from 'vue'
-
-const app = document.querySelector<HTMLDivElement>('#app')!
-app.style.setProperty('--bg-image', `url(${setting.bgImage})`)
 
 const resizer = useTemplateRef('sidebarResizer')
 const resizeSidebar = () => {

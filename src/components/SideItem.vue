@@ -7,6 +7,7 @@
     >
         <div
             class="flex items-center py-2.5 px-2.5 gap-x-2.5 rounded-xl hover:bg-primary hover:text-primary-fg hover:opacity-80"
+            :title="bookmark.url"
             draggable="true"
             @dragstart="onDragStart"
             @dragenter="onDragEnter"
@@ -37,7 +38,7 @@
         >
             <div
                 v-if="childrenVisible"
-                class="grid overflow-hidden ml-3"
+                class="grid overflow-hidden grid-cols-1 ml-3"
             >
                 <div class="min-h-0">
                     <SideItem

@@ -21,6 +21,11 @@
 @utility grid-auto-rows-* {
     grid-auto-rows: calc(--value(integer) * 1px);
 }
+
+@utility line-clamp-* {
+    text-overflow: ellipsis;
+}
+
 @theme {
     --color-bg: oklch(1 0 0);
     --color-primary: oklch(0.205 0 0);
@@ -32,9 +37,8 @@
 }
 
 body {
-    min-height: 100dvh;
+    background-color: var(--color-bg);
 }
-
 :root {
     color: oklch(0.12 0 0);
 }
