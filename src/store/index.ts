@@ -7,6 +7,9 @@ export const useStorageData = <T extends object>(data: T, key: string): Reactive
         if (res) {
             Object.assign(target, JSON.parse(res))
         }
+        else {
+            localStorage.setItem(key, JSON.stringify(target))
+        }
     }
     catch (error) {
         console.error(error)
@@ -27,7 +30,8 @@ export const useStorageData = <T extends object>(data: T, key: string): Reactive
 
 export const setting = useStorageData({
     sidebar: {
-        bgColor: '#e8ce6f',
-        width: 200
-    }
+        bgColor: '#000',
+        width: 300
+    },
+    bgImage: 'https://w.wallhaven.cc/full/zp/wallhaven-zpzjoy.jpg'
 }, 'setting')

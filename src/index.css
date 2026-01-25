@@ -30,6 +30,11 @@
     --color-border: oklch(0.922 0 0);
     --color-modal: oklch(0 0 0 / 0.6);
 }
+
+body {
+    min-height: 100dvh;
+}
+
 :root {
     color: oklch(0.12 0 0);
 }

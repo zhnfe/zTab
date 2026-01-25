@@ -14,7 +14,7 @@ export default [
     {
         name: 'app/files-to-ignore',
         ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/.nuxt/**',
-            '.local', 'src/globalIconComponents.d.ts', 'src/.icons'
+            '.local', 'src/globalIconComponents.d.ts', 'src/.icons', 'release'
         ]
     },
     ...vueConfig,
