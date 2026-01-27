@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@layer base {
+    [icon] {
+        display: inline;
+        width: 1.2em;
+        height: 1.2em;
+        fill: currentColor;
+        vertical-align: text-bottom;
+    }
+}
+
 @utility grid-cols-auto {
     grid-template-columns: repeat(auto-fill, var(--icon-width-full));
 }
@@ -38,6 +48,16 @@
 
 body {
     background-color: var(--color-bg);
+}
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url('@/assets/noise-filter.svg');
+    background-size: 150px;
+    background-repeat: repeat;
+    opacity: 0.4;
 }
 :root {
     color: oklch(0.12 0 0);

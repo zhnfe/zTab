@@ -6,12 +6,10 @@
         }"
     >
         <SideBar />
-        <div ref="sidebarResizer" class="cursor-col-resize grow-0 hover:bg-amber-200 transition-all"></div>
+        <div ref="sidebarResizer" class="rounded-full cursor-col-resize grow-0 hover:bg-amber-200 transition-all"></div>
     </div>
-    <div class="p-3 pl-0 overflow-hidden">
-        <div class="h-full rounded-md flex justify-center items-center" :style="{backgroundImage: `url(${setting.bgImage})`}">
-            <MainSearch />
-        </div>
+    <div class="rounded-md flex justify-center items-center" :style="{backgroundImage: `url(${setting.bgImage})`}">
+        <MainSearch />
     </div>
 </template>
 

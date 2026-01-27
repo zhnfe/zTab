@@ -1,6 +1,8 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, watch, writeFileSync, type FSWatcher } from 'fs'
+import { FSWatcher, mkdirSync, readdirSync, readFileSync, watch } from 'fs'
 import { writeFile } from 'fs/promises'
-import { resolve, sep } from 'path'
+import { resolve } from 'path'
+import { Plugin } from 'vite'
+import { compileTemplate } from 'vue/compiler-sfc'
 
 const toCamelCase = (str: string) => {
     return str
@@ -8,11 +10,13 @@ const toCamelCase = (str: string) => {
         .replace(/[_-](\w)/g, (_, char) => char.toUpperCase())
         .replace(/^./, char => char.toUpperCase())
 }
-export const iconPrefix = 'Icon'
-
 const rootPath = process.cwd()
+const vid = '~vic/'
+const components = new Map<string, string>()
+const files = new Map<string, string>()
+let watcher: FSWatcher | null = null
 
-const componentTemplate = '<template>@@svg@@</template>'
+// const componentTemplate = '<template>@@svg@@</template>'
 const typeTemplate = `import type { DefineComponent } from 'vue'
 declare module 'vue' {
     export interface GlobalComponents {
@@ -24,24 +28,20 @@ declare module 'vue' {
 type MakeResolveOptions = {
     modulePath: string
     customPath: string
-    targetPath: string
     prefix: string
     typeFilePath: string
 }
-const defualtResolveOptions: MakeResolveOptions = {
-    modulePath: '',
-    customPath: 'src/assets/icons',
-    targetPath: 'src/.icons',
-    prefix: 'Icon',
-    typeFilePath: 'src/globalIconComponents.d.ts'
-}
-
-export const makeIconResolve = (initOptions: Partial<MakeResolveOptions> = {}) => {
-    const options = Object.assign(defualtResolveOptions, initOptions)
+export const makeIconResolver = (initOptions: Partial<MakeResolveOptions> = {}) => {
+    const options = Object.assign({
+        modulePath: '',
+        customPath: 'src/assets/icons',
+        prefix: 'Icon',
+        typeFilePath: 'src/globalIconComponents.d.ts'
+    },
+    initOptions)
     if (!options.customPath && !options.modulePath) {
         throw new Error('modulePath or customPath is required')
     }
-    const files = new Map<string, string>()
     const _setFiles = (path: string, targetPath: string) => {
         const svgFiles = readdirSync(path)
         for (const file of svgFiles) {
@@ -49,7 +49,6 @@ export const makeIconResolve = (initOptions: Partial<MakeResolveOptions> = {}) =
             files.set(name, resolve(rootPath, targetPath, file))
         }
     }
-    let watcher: FSWatcher | null = null
     if (options.customPath) {
         const customPath = resolve(rootPath, options.customPath)
         mkdirSync(customPath, { recursive: true })
@@ -57,12 +56,6 @@ export const makeIconResolve = (initOptions: Partial<MakeResolveOptions> = {}) =
         watcher = watch(customPath, eventType => {
             if (eventType === 'rename') {
                 _setFiles(customPath, options.customPath)
-            }
-        })
-        process.on('exit', () => {
-            if (watcher) {
-                watcher.close()
-                watcher = null
             }
         })
     }
@@ -78,20 +71,53 @@ export const makeIconResolve = (initOptions: Partial<MakeResolveOptions> = {}) =
         const typeFilePath = resolve(rootPath, options.typeFilePath)
         writeFile(typeFilePath, typeTemplate.replace('@@types@@', typeFile))
     }
-    const targetPath = resolve(rootPath, options.targetPath)
-    // 创建icon组件目录
-    mkdirSync(targetPath, { recursive: true })
     return (name: string) => {
-        if (!name.startsWith(options.prefix) || !files.has(name)) {
-            return
+        if (name.startsWith(options.prefix)) {
+            if (!files.has(name)) {
+                console.warn('\x1B[31m', `icon '${name}' not found`)
+                return
+            }
+            return `${vid}${name}`
         }
-        const componentPath = resolve(targetPath, `${name}.vue`).replaceAll(sep, '/')
-        if (existsSync(componentPath)) {
-            return componentPath
-        }
-        const svg = readFileSync(files.get(name)!, 'utf-8')
-        const component = componentTemplate.replace('@@svg@@', svg.replace('<svg', '<svg class="i-icon"'))
-        writeFileSync(componentPath, component)
-        return componentPath
     }
+}
+
+export const makeIconPlugin = ({
+    iconAttribute = 'icon'
+}: { iconAttribute?: string } = {}): Plugin[] => {
+    return [{
+        name: 'make-icon-plugin',
+        resolveId(id) {
+            if (id.startsWith(vid)) {
+                return id
+            }
+        },
+        load(id) {
+            if (id.startsWith(vid)) {
+                const name = id.replace(vid, '').replace('.vue', '')
+                if (components.has(name)) {
+                    return components.get(name)
+                }
+                const filePath = files.get(name)!
+                const file = readFileSync(filePath, { encoding: 'utf-8' })
+                const { code } = compileTemplate({
+                    filename: name,
+                    id: id,
+                    source: file.replace('<svg', `<svg ${iconAttribute}`)
+                })
+                const component = code.replace('export function', 'export default function')
+                components.set(name, component)
+                return component
+            }
+        }
+    }, {
+        name: 'exit-process',
+        apply: 'build',
+        enforce: 'post',
+        closeBundle() {
+            if (watcher) {
+                watcher.close()
+            }
+        }
+    }]
 }

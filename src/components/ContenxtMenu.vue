@@ -12,7 +12,7 @@
                 @click="item.onClick"
                 v-if="'title' in item"
             >
-                <component :is="item.icon" />
+                <component :is="getAsyncIcon(item)" />
                 <span>{{ item.title }}</span>
             </div>
             <hr v-else class="border-gray-200 my-1">
@@ -21,6 +21,8 @@
 </template>
 <script setup lang="ts">
 import type { ContextItem } from '@/utils/commandComponents'
+import { defineAsyncComponent } from 'vue'
+import IconHourglassBottom from '~vic/IconHourglassBottom'
 
 interface Props {
     items: ContextItem[]
@@ -30,6 +32,13 @@ interface Props {
     }
 }
 defineProps<Props>()
+const getAsyncIcon = (item: Extract<ContextItem, { title: string }>) => {
+    return defineAsyncComponent({
+        loader: item.icon,
+        loadingComponent: IconHourglassBottom,
+        delay: 0
+    })
+}
 const emit = defineEmits(['close'])
 document.addEventListener('click', () => emit('close'), { once: true, capture: true })
 document.addEventListener('contextmenu', () => emit('close'), { once: true, capture: true })

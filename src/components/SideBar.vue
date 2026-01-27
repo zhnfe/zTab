@@ -1,5 +1,5 @@
 <template>
-    <aside class="text-sm py-5 select-none h-screen overflow-hidden flex flex-col">
+    <aside class="text-sm py-5 select-none overflow-hidden flex flex-col">
         <div class="grid grid-autofill-90 grid-auto-rows-48 gap-2 px-2">
             <FavoriteItem />
         </div>
