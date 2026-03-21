@@ -12,15 +12,15 @@ export const useDialog = (props: DialogProps) => {
     render(vm, div)
     document.body.appendChild(div)
 }
-export type ContextItem = 
-| {
-    title: string
-    icon: () => Promise<typeof import('~vic/*')>
-    onClick: () => void
-}
-| {
-    divider: boolean
-}
+export type ContextItem
+    = | {
+        title: string
+        icon: () => Promise<typeof import('~vic/*')>
+        onClick: () => void
+    }
+    | {
+        divider: boolean
+    }
 
 // #region generateContextMenuItems
 export const generateContextMenuItems = (bookmark: BookmarkNode, isFavorite?: boolean): ContextItem[] => {
