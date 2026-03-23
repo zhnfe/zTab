@@ -1,5 +1,5 @@
-export const getRandomColor = () => {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16)
+export function getRandomColor() {
+    return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
 
 /**
@@ -8,10 +8,7 @@ export const getRandomColor = () => {
  * @param childrenKey - 子数组的键名
  * @returns 扁平化后的数组
  */
-export const flatArrayObject = <T extends Record<string, unknown>>(
-    array: T[],
-    childrenKey = 'children' as keyof T
-): Omit<T, typeof childrenKey>[] => {
+export function flatArrayObject<T extends Record<string, unknown>>(array: T[], childrenKey = 'children' as keyof T): Omit<T, typeof childrenKey>[] {
     const result: T[] = []
 
     const flat = (items: T[]): void => {
@@ -29,7 +26,7 @@ export const flatArrayObject = <T extends Record<string, unknown>>(
 }
 
 /** 获取链接图标 */
-export const getFavicon = (u?: string) => {
+export function getFavicon(u?: string) {
     if (!u) {
         return ''
     }

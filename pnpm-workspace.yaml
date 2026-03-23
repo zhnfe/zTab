@@ -1,7 +1,10 @@
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
+patchedDependencies:
+  '@crxjs/vite-plugin': patches/@crxjs__vite-plugin.patch
 ignoredBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
   - simple-git-hooks
-
-patchedDependencies:
-  '@crxjs/vite-plugin': patches/@crxjs__vite-plugin.patch

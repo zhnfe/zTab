@@ -5,7 +5,6 @@
     >
         <div
             v-if="visible"
-            ref="modal"
             class="bg-black/50 fixed inset-0 z-999 xy-center"
             @click="close"
         >
@@ -22,20 +21,20 @@
                     <label class="grid gap-x-3 mb-4 grid-cols-[50px_1fr] auto-rows-[32px] items-center">
                         <span>名称</span>
                         <input
+                            v-model="state.title"
                             type="text"
                             name="title"
                             class="border-1 border-gray-300 rounded-sm h-full px-2.5 focus-visible:outline-0 focus-visible:border-blue-400"
-                            v-model="state.title"
-                        >
+                        />
                     </label>
                     <label class="grid gap-x-3 mb-4 grid-cols-[50px_1fr] auto-rows-[30px] items-center">
                         <span>链接</span>
                         <input
+                            v-model="state.url"
                             type="text"
                             name="title"
                             class="border-1 border-gray-300 rounded-sm h-full px-2.5 focus-visible:outline-0 focus-visible:border-blue-400"
-                            v-model="state.url"
-                        >
+                        />
                     </label>
                 </form>
                 <div class="flex flex-row-reverse gap-x-3 text-white">
@@ -57,10 +56,12 @@
         </div>
     </transition>
 </template>
+
 <script setup lang="ts">
-import { initBookmarks, isBookmarkFolder } from '@/utils/chromeApi'
 import type { BookmarkNode } from '@/utils/serviceWorker'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { initBookmarks, isBookmarkFolder } from '@/utils/chromeApi'
+
 export interface DialogProps {
     title: string
     url?: string
@@ -70,11 +71,11 @@ export interface DialogProps {
 }
 const props = defineProps<DialogProps>()
 
+defineEmits(['close'])
 const state = reactive({
     title: props.data?.title ?? '',
     url: props.data?.url ?? ''
 })
-defineEmits(['close'])
 const visible = ref(false)
 const close = () => {
     visible.value = false

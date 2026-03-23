@@ -5,35 +5,47 @@
         "package.json": "pnpm*, .gitignore",
         "vite.config.ts": "eslint.config.js, manifest.config.ts"
     },
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
-    },
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "eslint.format.enable": true,
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "[vue]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
+    "js/ts.tsdk.path": "node_modules/typescript/lib",
     "eslint.useFlatConfig": true,
-    "[javascript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    // Auto fix
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "never"
     },
-    "[tailwindcss]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.tabSize": 4
+    // Enable eslint for all supported languages
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "vue",
+        "html",
+        "markdown",
+        "json",
+        "jsonc",
+        "yaml",
+        "toml",
+        "xml",
+        "gql",
+        "graphql",
+        "astro",
+        "svelte",
+        "css",
+        "less",
+        "scss",
+        "pcss",
+        "postcss"
+    ],
+    "[json]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "files.associations": {
-        "*.css": "tailwindcss"
-    },
-    "prettier.tabWidth": 4,
-    "[typescriptreact]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
+    "[html]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    }
 }

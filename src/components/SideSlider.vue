@@ -3,11 +3,12 @@
         ref="el"
         class="cursor-col-resize w-1 opacity-0 hover:opacity-25 bg-black my-1.5 rounded-sm"
         @mousedown="handleMouseDown"
-    ></div>
+    />
 </template>
+
 <script setup lang="ts">
-import { setting } from '@/store'
 import { reactive, useTemplateRef } from 'vue'
+import { setting } from '@/store'
 
 const mouseState = reactive({
     isDown: false,

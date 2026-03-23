@@ -1,7 +1,7 @@
 <template>
     <div
         class="leading-none pb-1 px-2 cursor-pointer nav-item-shadow"
-        :style="{transition: dragState.transition}"
+        :style="{ transition: dragState.transition }"
         @click.stop="handleClick(bookmark)"
         @contextmenu="handleSideBarMenu($event, bookmark)"
     >
@@ -24,7 +24,7 @@
                     draggable="false"
                     :src="getFavicon(bookmark.url)"
                     @error="handleIconLoadedError"
-                >
+                />
             </div>
             <div class="line-clamp-1">{{ bookmark.title }}</div>
         </div>
@@ -54,19 +54,20 @@
 </template>
 
 <script setup lang="ts">
+import type { BookmarkNode } from '@/utils/serviceWorker'
+import { computed, inject, ref } from 'vue'
 import { getFavicon } from '@/utils'
 import { isBookmarkFolder } from '@/utils/chromeApi'
 import { generateContextMenuItems, useContextMenu } from '@/utils/commandComponents'
 import { dragState } from '@/utils/drag'
-import type { BookmarkNode } from '@/utils/serviceWorker'
-import { computed, inject, ref } from 'vue'
+
+const props = withDefaults(defineProps<Props>(), {})
 const beginClass = 'grid-rows-[0fr]'
 const endClass = 'grid-rows-[1fr]'
 interface Props {
     bookmark: BookmarkNode
     indexes: number[]
 }
-const props = withDefaults(defineProps<Props>(), {})
 const isFolderItem = isBookmarkFolder(props.bookmark)
 const showChildren = ref(false)
 const childrenVisible = computed(() => {
@@ -180,7 +181,6 @@ const onDrop = () => {
     const pos = target.position
     if (pos === 'middle') {
         clearGroupStyle(target.el)
-        return
     }
 
     // const parent = target.el!.parentElement as HTMLDivElement

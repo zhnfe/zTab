@@ -1,12 +1,12 @@
-import { deleteBookmark, initBookmarks, isBookmarkFolder } from './chromeApi.ts'
-import { render } from 'vue'
-import TheDialog from '@/components/TheDialog.vue'
-import ContenxtMenu from '@/components/ContenxtMenu.vue'
-import { favorite } from '.'
-import type { DialogProps } from '@/components/TheDialog.vue'
 import type { BookmarkNode } from './serviceWorker'
+import type { DialogProps } from '@/components/TheDialog.vue'
+import { render } from 'vue'
+import ContenxtMenu from '@/components/ContenxtMenu.vue'
+import TheDialog from '@/components/TheDialog.vue'
+import { favorite } from '.'
+import { deleteBookmark, initBookmarks, isBookmarkFolder } from './chromeApi.ts'
 
-export const useDialog = (props: DialogProps) => {
+export function useDialog(props: DialogProps) {
     const div = document.createElement('div')
     const vm = <TheDialog {...props} onClose={() => div.remove()} />
     render(vm, div)
@@ -23,14 +23,14 @@ export type ContextItem
     }
 
 // #region generateContextMenuItems
-export const generateContextMenuItems = (bookmark: BookmarkNode, isFavorite?: boolean): ContextItem[] => {
+export function generateContextMenuItems(bookmark: BookmarkNode, isFavorite?: boolean): ContextItem[] {
     if (isBookmarkFolder(bookmark)) {
         return [
             {
                 title: '打开所有书签',
                 icon: () => import('~vic/IconOpenInBrowser'),
                 onClick() {
-                    bookmark.children?.forEach(item => {
+                    bookmark.children?.forEach((item) => {
                         window.open(item.url!, '_blank')
                     })
                 }
@@ -129,7 +129,7 @@ export const generateContextMenuItems = (bookmark: BookmarkNode, isFavorite?: bo
 
 // #endregion
 
-export const useContextMenu = (position: { x: number, y: number }, items: ContextItem[]) => {
+export function useContextMenu(position: { x: number, y: number }, items: ContextItem[]) {
     const div = document.createElement('div')
     const vm = <ContenxtMenu items={items} position={position} onClose={() => div.remove()} />
     render(vm, div)

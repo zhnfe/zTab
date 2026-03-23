@@ -8,15 +8,16 @@
         @contextmenu="(e) => handleSideBarMenu(e, item)"
     >
         <div class="w-5 h-5 rounded-md overflow-hidden">
-            <img :src="getFavicon(item.url)">
+            <img :src="getFavicon(item.url)" />
         </div>
     </div>
 </template>
+
 <script setup lang="ts">
-import { flattedBookmarks } from '@/utils/chromeApi'
+import type { BookmarkNode } from '@/utils/serviceWorker'
 import { computed } from 'vue'
 import { favorite, getFavicon } from '@/utils'
-import type { BookmarkNode } from '@/utils/serviceWorker'
+import { flattedBookmarks } from '@/utils/chromeApi'
 import { generateContextMenuItems, useContextMenu } from '@/utils/commandComponents'
 
 const favorites = computed(() => {

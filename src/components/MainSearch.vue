@@ -12,10 +12,10 @@
                 @input="onInput"
                 @compositionend="onCompositionEnd"
                 @keydown="handleKeyDown"
-            >
+            />
         </div>
-        <hr class="border-border my-1.5" v-if="result.length">
-        <div class="max-h-62 overflow-y-auto" ref="resultContainer">
+        <hr v-if="result.length" class="border-border my-1.5" />
+        <div ref="resultContainer" class="max-h-62 overflow-y-auto">
             <!--
                     hover:bg-gray-200 dark:hover:bg-gray-700
                 :class="index === state.curIndex ? 'bg-primary text-primary-fg' : ''"
@@ -29,7 +29,7 @@
                 :style="index === state.curIndex
                     ? {
                         backgroundColor: 'var(--color-primary)',
-                        color: 'var(--color-primary-fg)'
+                        color: 'var(--color-primary-fg)',
                     }
                     : {}
                 "
@@ -39,8 +39,8 @@
                     v-if="showFavicon(item)"
                     class="w-5.5 p-1 bg-bg rounded-sm"
                     :src="getFavicon(item.url)"
-                >
-                <IconSearch class="w-5.5 h-5.5 p-0.5" v-else />
+                />
+                <IconSearch v-else class="w-5.5 h-5.5 p-0.5" />
                 <div class="line-clamp-1 mr-5">{{ item.title }}</div>
                 <div
                     class="text-desc ml-auto text-nowrap"
@@ -55,10 +55,11 @@
         </div>
     </div>
 </template>
+
 <script setup lang="ts">
+import { onMounted, reactive, ref, useTemplateRef, watch } from 'vue'
 import { getFavicon } from '@/utils'
 import { createTab, flattedBookmarks, getHistory, getTab, updateTab } from '@/utils/chromeApi'
-import { onMounted, reactive, ref, useTemplateRef, watch } from 'vue'
 
 const searchEngines = [
     {
@@ -132,7 +133,7 @@ const search = async (q: string) => {
     const res = await Promise.all<Result[]>([searchEngine(q), searchBookmark(q), searchTab(q), searchHistory(q)])
     // 根据url去重，时间复杂度on
     const map = new Map<string, Result>()
-    res.flat().forEach(item => {
+    res.flat().forEach((item) => {
         if (!map.has(item.url)) {
             map.set(item.url, item)
         }
@@ -192,7 +193,7 @@ onMounted(() => {
     searchInput.value?.focus()
     search('')
 })
-watch(() => state.curIndex, i => {
+watch(() => state.curIndex, (i) => {
     if (!resultContainer.value) {
         return
     }

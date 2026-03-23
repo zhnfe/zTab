@@ -1,5 +1,5 @@
-import { computed, ref } from 'vue'
 import type { BookmarkNode, MessageRequest, MessageResponse } from './serviceWorker'
+import { computed, ref } from 'vue'
 
 /**
  * 发送消息，无返回值处理
@@ -38,7 +38,7 @@ export const isBookmarkFolder = (item: BookmarkNode) => 'children' in item
 
 export const bookmarks = ref<BookmarkNode[]>([])
 
-export const initBookmarks = () => {
+export function initBookmarks() {
     chrome.runtime.sendMessage({ action: 'getBookmark' }, (res: MessageResponse) => {
         bookmarks.value = res.bookmarks ?? []
     })
@@ -62,13 +62,13 @@ export const flattedBookmarks = computed(() => {
     _flat(bookmarks.value)
     return result as Array<BookmarkNode & { url: string }>
 })
-export const updateTab = (tabId: number, option: chrome.tabs.UpdateProperties) => {
+export function updateTab(tabId: number, option: chrome.tabs.UpdateProperties) {
     return sendMessage({ action: 'updateTab', tab: { tabId, option } })
 }
-export const createTab = (option: chrome.tabs.CreateProperties) => {
+export function createTab(option: chrome.tabs.CreateProperties) {
     return sendMessage({ action: 'createTab', option })
 }
-export const deleteBookmark = (bookmark: BookmarkNode) => {
+export function deleteBookmark(bookmark: BookmarkNode) {
     const api = bookmark.children ? 'removeTree' : 'remove'
     if (confirm('确定删除吗?')) {
         chrome.bookmarks[api](bookmark.id)
@@ -76,10 +76,10 @@ export const deleteBookmark = (bookmark: BookmarkNode) => {
     }
 }
 
-export const getHistory = (query: chrome.history.HistoryQuery) => {
+export function getHistory(query: chrome.history.HistoryQuery) {
     return sendMessage({ action: 'getHistory', query }, 'histories', [])
 }
 
-export const getTab = () => {
+export function getTab() {
     return sendMessage({ action: 'getTab' }, 'tabs', [])
 }

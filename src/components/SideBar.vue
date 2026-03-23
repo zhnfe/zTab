@@ -15,17 +15,18 @@
                 class="absolute top-0 h-0.5 opacity-0 ml-4.5 flex items-center"
                 style="width: calc(100% - 18px - 8px);"
             >
-                <div class="h-2 w-2 rounded-full bg-red-600"></div>
-                <div class="h-full flex-1 bg-red-600"></div>
+                <div class="h-2 w-2 rounded-full bg-red-600" />
+                <div class="h-full flex-1 bg-red-600" />
             </div>
         </nav>
     </aside>
 </template>
+
 <script setup lang="ts">
-import { bookmarks } from '@/utils/chromeApi'
-import SideItem from './SideItem.vue'
-import FavoriteItem from './FavoriteItem.vue'
 import { provide, useTemplateRef } from 'vue'
+import { bookmarks } from '@/utils/chromeApi'
+import FavoriteItem from './FavoriteItem.vue'
+import SideItem from './SideItem.vue'
 
 const divider = useTemplateRef('divider')
 provide('handleDevider', (type: 'hide' | 'move', y?: number) => {
@@ -41,5 +42,4 @@ provide('handleDevider', (type: 'hide' | 'move', y?: number) => {
         divider.value.style.translate = `0 ${y}px`
     }
 })
-
 </script>

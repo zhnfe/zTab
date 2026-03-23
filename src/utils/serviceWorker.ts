@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener((
     const action = request.action
     // console.log('[service worker received message] ', action)
     if (action === 'getBookmark') {
-        chrome.bookmarks.getTree().then(value => {
+        chrome.bookmarks.getTree().then((value) => {
             const bookmarks = value[0]?.children ?? []
             const data = [...bookmarks?.[0]?.children ?? [], ...bookmarks.slice(1)]
             sendResponse({
@@ -62,7 +62,7 @@ chrome.runtime.onMessage.addListener((
         return true
     }
     if (action === 'getHistory') {
-        chrome.history.search(request.query).then(value => {
+        chrome.history.search(request.query).then((value) => {
             sendResponse({
                 code: 0,
                 message: 'success',
@@ -72,7 +72,7 @@ chrome.runtime.onMessage.addListener((
         return true
     }
     if (action === 'getTab') {
-        chrome.tabs.query({}).then(value => {
+        chrome.tabs.query({}).then((value) => {
             sendResponse({
                 code: 0,
                 message: 'success',
@@ -83,12 +83,12 @@ chrome.runtime.onMessage.addListener((
     }
     sendResponse({
         code: 4,
-        message: 'unknown action: ' + action
+        message: `unknown action: ${action}`
     })
 })
 
 // 弹出页
-chrome.commands.onCommand.addListener(command => {
+chrome.commands.onCommand.addListener((command) => {
     if (command === 'openPopup') {
         chrome.tabs.create({ url: 'src/sidepanel/index.html' })
     }

@@ -1,6 +1,7 @@
-import { reactive, watch, type Reactive } from 'vue'
+import type { Reactive } from 'vue'
+import { reactive, watch } from 'vue'
 
-export const useStorageData = <T extends object>(data: T, key: string): Reactive<T> => {
+export function useStorageData<T extends object>(data: T, key: string): Reactive<T> {
     const target = reactive(data)
     try {
         const res = localStorage.getItem(key)

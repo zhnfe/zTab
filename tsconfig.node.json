@@ -1,21 +1,21 @@
 {
     "extends": "@tsconfig/node24/tsconfig.json",
+    "compilerOptions": {
+        "composite": true,
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "types": [
+            "node"
+        ],
+        "allowImportingTsExtensions": true,
+        "noEmit": true
+    },
     "include": [
         "vite.config.*",
         "eslint.config.*",
         "plugins/*",
         "scripts/*",
         "manifest.config.*"
-    ],
-    "compilerOptions": {
-        "composite": true,
-        "noEmit": true,
-        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "allowImportingTsExtensions": true,
-        "types": [
-            "node"
-        ]
-    }
+    ]
 }

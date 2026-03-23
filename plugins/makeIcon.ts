@@ -1,10 +1,11 @@
-import { FSWatcher, mkdirSync, readdirSync, readFileSync, watch } from 'fs'
-import { writeFile } from 'fs/promises'
-import { resolve } from 'path'
-import { Plugin } from 'vite'
+import type { FSWatcher } from 'node:fs'
+import type { Plugin } from 'vite'
+import { mkdirSync, readdirSync, readFileSync, watch } from 'node:fs'
+import { writeFile } from 'node:fs/promises'
+import { resolve } from 'node:path'
 import { compileTemplate } from 'vue/compiler-sfc'
 
-const toCamelCase = (str: string) => {
+function toCamelCase(str: string) {
     return str
         .replace('.svg', '')
         .replace(/[_-](\w)/g, (_, char) => char.toUpperCase())
@@ -25,20 +26,19 @@ declare module 'vue' {
 }
 `
 
-type MakeResolveOptions = {
+interface MakeResolveOptions {
     modulePath: string
     customPath: string
     prefix: string
     typeFilePath: string
 }
-export const makeIconResolver = (initOptions: Partial<MakeResolveOptions> = {}) => {
+export function makeIconResolver(initOptions: Partial<MakeResolveOptions> = {}) {
     const options = Object.assign({
         modulePath: '',
         customPath: 'src/assets/icons',
         prefix: 'Icon',
         typeFilePath: 'src/globalIconComponents.d.ts'
-    },
-    initOptions)
+    }, initOptions)
     if (!options.customPath && !options.modulePath) {
         throw new Error('modulePath or customPath is required')
     }
@@ -53,7 +53,7 @@ export const makeIconResolver = (initOptions: Partial<MakeResolveOptions> = {}) 
         const customPath = resolve(rootPath, options.customPath)
         mkdirSync(customPath, { recursive: true })
         _setFiles(customPath, options.customPath)
-        watcher = watch(customPath, eventType => {
+        watcher = watch(customPath, (eventType) => {
             if (eventType === 'rename') {
                 _setFiles(customPath, options.customPath)
             }
@@ -82,9 +82,9 @@ export const makeIconResolver = (initOptions: Partial<MakeResolveOptions> = {}) 
     }
 }
 
-export const makeIconPlugin = ({
+export function makeIconPlugin({
     iconAttribute = 'icon'
-}: { iconAttribute?: string } = {}): Plugin[] => {
+}: { iconAttribute?: string } = {}): Plugin[] {
     return [{
         name: 'make-icon-plugin',
         resolveId(id) {
@@ -102,7 +102,7 @@ export const makeIconPlugin = ({
                 const file = readFileSync(filePath, { encoding: 'utf-8' })
                 const { code } = compileTemplate({
                     filename: name,
-                    id: id,
+                    id,
                     source: file.replace('<svg', `<svg ${iconAttribute}`)
                 })
                 const component = code.replace('export function', 'export default function')

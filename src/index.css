@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer base {
     [icon] {
@@ -23,10 +23,7 @@
 }
 
 @utility grid-autofill-* {
-    grid-template-columns: repeat(
-        auto-fill,
-        minmax(calc(--value(integer) * 1px), 1fr)
-    );
+    grid-template-columns: repeat(auto-fill, minmax(calc(--value(integer) * 1px), 1fr));
 }
 @utility grid-auto-rows-* {
     grid-auto-rows: calc(--value(integer) * 1px);
@@ -50,7 +47,7 @@ body {
     background-color: var(--color-bg);
 }
 body::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     z-index: -1;

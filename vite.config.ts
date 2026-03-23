@@ -1,15 +1,16 @@
 import path from 'node:path'
 import { crx } from '@crxjs/vite-plugin'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-// import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
+import vue from '@vitejs/plugin-vue'
+
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import zip from 'vite-plugin-zip-pack'
 import manifest from './manifest.config.ts'
 import { name, version } from './package.json'
-import Components from 'unplugin-vue-components/vite'
 import { makeIconPlugin, makeIconResolver } from './plugins/makeIcon.ts'
+
 export default defineConfig({
     resolve: {
         alias: {
@@ -35,7 +36,6 @@ export default defineConfig({
         }),
         tailwindcss(),
         zip({ outDir: 'release', outFileName: `${name}-${version}.zip` })
-        // vueDevTools()
     ],
     build: {
         target: 'esnext',
