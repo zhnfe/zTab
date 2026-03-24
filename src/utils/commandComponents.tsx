@@ -1,14 +1,22 @@
 import type { BookmarkNode } from './serviceWorker'
-import type { DialogProps } from '@/components/TheDialog.vue'
+import type { BookmarkFormProps } from '@/components/BookmarkForm.vue'
 import { render } from 'vue'
+import BookmarkForm from '@/components/BookmarkForm.vue'
 import ContenxtMenu from '@/components/ContenxtMenu.vue'
-import TheDialog from '@/components/TheDialog.vue'
 import { favorite } from '.'
 import { deleteBookmark, initBookmarks, isBookmarkFolder } from './chromeApi.ts'
 
-export function useDialog(props: DialogProps) {
+export function modifyBookmark(props: BookmarkFormProps) {
+    console.log(props.data)
+
     const div = document.createElement('div')
-    const vm = <TheDialog {...props} onClose={() => div.remove()} />
+
+    const close = () => {
+        render(null, div) // ✅ 先通知 Vue 卸载，触发 onUnmounted
+        div.remove() // 再移除 DOM
+    }
+
+    const vm = <BookmarkForm {...props} onClose={close} />
     render(vm, div)
     document.body.appendChild(div)
 }
@@ -39,9 +47,8 @@ export function generateContextMenuItems(bookmark: BookmarkNode, isFavorite?: bo
                 title: '添加书签',
                 icon: () => import('~vic/IconBookmarkAdd'),
                 onClick() {
-                    useDialog({
-                        title: '新建书签',
-                        type: 'bookmark',
+                    modifyBookmark({
+                        type: 'add',
                         data: bookmark
                     })
                 }
@@ -86,9 +93,8 @@ export function generateContextMenuItems(bookmark: BookmarkNode, isFavorite?: bo
             title: '编辑',
             icon: () => import('~vic/IconEdit'),
             onClick() {
-                useDialog({
-                    title: '编辑书签',
-                    type: 'bookmark',
+                modifyBookmark({
+                    type: 'update',
                     data: bookmark
                 })
             }
@@ -123,6 +129,16 @@ export function generateContextMenuItems(bookmark: BookmarkNode, isFavorite?: bo
             icon: () => import('~vic/IconQrCode'),
             onClick() {
             }
+        },
+        {
+            title: '添加书签',
+            icon: () => import('~vic/IconBookmarkAdd'),
+            onClick() {
+                modifyBookmark({
+                    type: 'add',
+                    data: bookmark
+                })
+            }
         }
     ]
 }
@@ -130,8 +146,16 @@ export function generateContextMenuItems(bookmark: BookmarkNode, isFavorite?: bo
 // #endregion
 
 export function useContextMenu(position: { x: number, y: number }, items: ContextItem[]) {
+    const menuWidth = 220
+    if (menuWidth + position.x > innerWidth) {
+        position.x = innerWidth - menuWidth
+    }
     const div = document.createElement('div')
-    const vm = <ContenxtMenu items={items} position={position} onClose={() => div.remove()} />
+    const close = () => {
+        render(null, div)
+        div.remove()
+    }
+    const vm = <ContenxtMenu items={items} position={position} onClose={close} />
     render(vm, div)
     document.body.appendChild(div)
 }

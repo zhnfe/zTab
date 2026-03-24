@@ -1,7 +1,7 @@
 {
     "name": "zTab",
     "type": "module",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "private": true,
     "engines": {
         "node": ">=24.0.0",
@@ -13,7 +13,7 @@
         "type-check": "vue-tsc -b",
         "lint": "eslint --fix",
         "lint-only": "eslint --quiet",
-        "postinstall": "node scripts/index.ts && simple-git-hooks"
+        "postinstall": "simple-git-hooks"
     },
     "dependencies": {
         "@material-symbols/svg-400": "^0.36.4",
@@ -29,6 +29,7 @@
         "@vitejs/plugin-vue": "^6.0.5",
         "@vitejs/plugin-vue-jsx": "^5.1.5",
         "@vue/tsconfig": "^0.8.1",
+        "daisyui": "^5.5.19",
         "eslint": "^9.39.4",
         "eslint-plugin-format": "^2.0.1",
         "simple-git-hooks": "^2.13.1",

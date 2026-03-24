@@ -59,7 +59,6 @@ type StyleProperties = Exclude<
 >
 export function css(el: HTMLElement, style: StyleProperties, value: string): void
 export function css(el: HTMLElement, style: Partial<Record<StyleProperties, string>>): void
-
 // 函数实现
 export function css(
     el: HTMLElement,

@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from './SidePanel.vue'
 import '@/index.css'
 import '@/utils/theme'
 

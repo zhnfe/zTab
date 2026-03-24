@@ -1,24 +1,27 @@
 <template>
-    <aside class="text-sm py-5 select-none overflow-hidden flex flex-col">
+    <aside class="py-5 select-none overflow-hidden flex flex-col relative max-h-screen">
         <div class="grid grid-autofill-90 grid-auto-rows-48 gap-2 px-2">
             <FavoriteItem />
         </div>
-        <nav class="flex-1 mt-5 overflow-x-hidden overflow-y-auto relative">
-            <SideItem
+        <ul class="menu w-full flex-nowrap flex-1 mt-5 overflow-y-auto">
+            <li
                 v-for="item, index in bookmarks"
                 :key="item.id"
-                :bookmark="item"
-                :indexes="[index]"
-            />
-            <div
-                ref="divider"
-                class="absolute top-0 h-0.5 opacity-0 ml-4.5 flex items-center"
-                style="width: calc(100% - 18px - 8px);"
             >
-                <div class="h-2 w-2 rounded-full bg-red-600" />
-                <div class="h-full flex-1 bg-red-600" />
-            </div>
-        </nav>
+                <SideItem
+                    :bookmark="item"
+                    :indexes="[index]"
+                />
+            </li>
+        </ul>
+        <div
+            ref="divider"
+            class="absolute top-0 h-0.5 opacity-0 ml-4.5 flex items-center"
+            style="width: calc(100% - 18px - 8px);"
+        >
+            <div class="h-2 w-2 rounded-full bg-red-600" />
+            <div class="h-full flex-1 bg-red-600" />
+        </div>
     </aside>
 </template>
 

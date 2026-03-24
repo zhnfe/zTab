@@ -3,7 +3,7 @@
         v-for="item in favorites"
         :key="item.id"
         draggable="true"
-        class="xy-center bg-gray-400/10 hover:bg-gray-400/20 rounded-xl cursor-pointer"
+        class="xy-center bg-base-content/10 hover:bg-base-content/20 rounded-xl cursor-pointer"
         @click="handleClick(item)"
         @contextmenu="(e) => handleSideBarMenu(e, item)"
     >

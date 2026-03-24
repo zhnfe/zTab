@@ -1,6 +1,6 @@
 <template>
     <h1 class="text-red-700 text-2xl">
-        <span>aljsdkfjlsadjlkfjlk</span>
+        popup
     </h1>
 </template>
 

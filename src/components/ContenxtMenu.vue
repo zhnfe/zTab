@@ -1,23 +1,23 @@
 <template>
-    <div
-        class="absolute max-w-100 p-2.5 bg-bg no-offset-shadow-10 rounded-sm text-[13px]"
+    <ul
+        class="menu bg-base-200 absolute no-offset-shadow-50 rounded-box"
         :style="{ top: `${position.y}px`, left: `${position.x}px` }"
     >
-        <template
+        <li
             v-for="item, index in items"
             :key="index"
         >
             <div
                 v-if="'title' in item"
-                class="flex items-center gap-2 rounded-xl hover:bg-primary hover:text-primary-fg cursor-pointer px-3 py-2 min-w-50"
+                class="flex items-center min-w-50 hover:menu-active"
                 @click="item.onClick"
             >
-                <component :is="getAsyncIcon(item)" />
+                <component :is="getIcon(item)" />
                 <span>{{ item.title }}</span>
             </div>
-            <hr v-else class="border-gray-200 my-1" />
-        </template>
-    </div>
+            <hr v-else class="mx-2 my-1.5 border-base-content/20 hover:bg-none cursor-auto p-0" />
+        </li>
+    </ul>
 </template>
 
 <script setup lang="ts">
@@ -34,11 +34,11 @@ interface Props {
 }
 defineProps<Props>()
 const emit = defineEmits(['close'])
-const getAsyncIcon = (item: Extract<ContextItem, { title: string }>) => {
+const getIcon = (item: Extract<ContextItem, { title: string }>) => {
     return defineAsyncComponent({
         loader: item.icon,
         loadingComponent: IconHourglassBottom,
-        delay: 0
+        delay: 200
     })
 }
 document.addEventListener('click', () => emit('close'), { once: true, capture: true })

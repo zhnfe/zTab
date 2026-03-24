@@ -1,5 +1,7 @@
 @import 'tailwindcss';
-
+@plugin "daisyui" {
+    themes: all;
+}
 @layer base {
     [icon] {
         display: inline;
@@ -10,16 +12,22 @@
     }
 }
 
-@utility grid-cols-auto {
-    grid-template-columns: repeat(auto-fill, var(--icon-width-full));
-}
-
 @utility xy-center {
     @apply flex items-center justify-center;
 }
-
+:root,
+.main-content {
+    --no-offset-shadow-opacity: 60%;
+}
+@media (prefers-color-scheme: dark) {
+    :root,
+    .main-content {
+        --no-offset-shadow-opacity: 15%;
+    }
+}
 @utility no-offset-shadow-* {
-    box-shadow: oklch(0.81 0 0 / 0.56) 0 0 calc(--value(integer) * 1px);
+    box-shadow: 0 0 calc(--value(integer) * 1px)
+        color-mix(in oklab, var(--color-base-content) var(--no-offset-shadow-opacity), transparent);
 }
 
 @utility grid-autofill-* {
@@ -33,19 +41,6 @@
     text-overflow: ellipsis;
 }
 
-@theme {
-    --color-bg: oklch(1 0 0);
-    --color-primary: oklch(0.205 0 0);
-    --color-primary-fg: oklch(0.985 0 0);
-    --color-desc: oklch(0.4 0 0);
-    --color-primary-desc: oklch(0.7 0 0);
-    --color-border: oklch(0.922 0 0);
-    --color-modal: oklch(0 0 0 / 0.6);
-}
-
-body {
-    background-color: var(--color-bg);
-}
 body::after {
     content: '';
     position: absolute;
@@ -56,51 +51,36 @@ body::after {
     background-repeat: repeat;
     opacity: 0.4;
 }
-:root {
-    color: oklch(0.12 0 0);
-}
-:root.dark,
-.dark {
-    color: oklch(0.985 0 0);
-    --color-bg: oklch(14.5% 0 0);
-    --color-primary: oklch(0.922 0 0);
-    --color-primary-fg: oklch(0.205 0 0);
-    --color-desc: oklch(0.7 0 0);
-    --color-primary-desc: oklch(0.35 0 0);
-    --color-border: oklch(1 0 0 / 0.1);
-}
-@layer base {
-    * {
-        border-color: var(--color-border);
-    }
-
-    .i-icon {
-        width: 1.2em;
-        height: 1.2em;
-        fill: currentColor;
-        vertical-align: text-bottom;
-    }
-}
-
 .modal-enter-active,
 .modal-leave-active,
 .modal-enter-active > *,
 .modal-leave-active > * {
-    @apply transition-all duration-200 ease-out;
+    transition: all 200ms ease-out;
 }
 .modal-enter-from,
 .modal-leave-to {
-    @apply opacity-0;
+    opacity: 0;
 }
 .modal-enter-to,
 .modal-leave-from {
-    @apply opacity-100;
+    opacity: 1;
 }
 .modal-enter-from > *,
 .modal-leave-to > * {
-    @apply scale-85;
+    scale: 0.85;
 }
 .modal-enter-to > *,
 .modal-leave-from > * {
-    @apply scale-100;
+    scale: 1;
+}
+
+.menu-dropdown {
+    display: block;
+    interpolate-size: allow-keywords;
+    height: 0;
+    transition: height 200ms ease-out;
+    overflow: hidden;
+}
+.menu-dropdown-show {
+    height: auto;
 }

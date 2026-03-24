@@ -1,5 +1,5 @@
 <template>
-    <div class="w-180 h-fit bg-bg no-offset-shadow-20 border rounded-xl p-3 text-base">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-40 card bg-base-100 p-3 text-base w-180 no-offset-shadow-150">
         <div class="flex items-center h-11 px-3 gap-3">
             <IconSearch />
             <input
@@ -14,30 +14,26 @@
                 @keydown="handleKeyDown"
             />
         </div>
-        <hr v-if="result.length" class="border-border my-1.5" />
+        <hr v-if="result.length" class="border-base-content/30 my-1.5" />
+
         <div ref="resultContainer" class="max-h-62 overflow-y-auto">
-            <!--
-                    hover:bg-gray-200 dark:hover:bg-gray-700
-                :class="index === state.curIndex ? 'bg-primary text-primary-fg' : ''"
-                -->
             <div
                 v-for="item, index in result"
                 :key="item.url"
-                class="group flex items-center gap-3 rounded-md p-3 mb-1 text-sm
-                        cursor-pointer dark:hover:bg-amber-100/10 hover:bg-amber-500
-                    "
+                class="flex items-center gap-3 rounded-md p-3 mb-1 text-sm cursor-pointer hover:bg-accent hover:text-accent-content"
                 :style="index === state.curIndex
                     ? {
                         backgroundColor: 'var(--color-primary)',
-                        color: 'var(--color-primary-fg)',
+                        color: 'var(--color-primary-content)',
                     }
                     : {}
                 "
+                :class="index === state.curIndex ? 'bg-primary text-primary-content' : ''"
                 @click="onItemConfirm(item)"
             >
                 <img
                     v-if="showFavicon(item)"
-                    class="w-5.5 p-1 bg-bg rounded-sm"
+                    class="w-5.5 p-1 bg-accent/60 rounded-sm"
                     :src="getFavicon(item.url)"
                 />
                 <IconSearch v-else class="w-5.5 h-5.5 p-0.5" />
