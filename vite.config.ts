@@ -40,12 +40,7 @@ export default defineConfig(({ command }) => {
             zip({ outDir: 'release', outFileName: `${name}-${version}.zip` })
         ],
         build: {
-            target: 'esnext',
-            rollupOptions: {
-                input: {
-                    newtab: 'src/newtab/index.html'
-                }
-            }
+            target: 'esnext'
         },
         server: {
             cors: {
