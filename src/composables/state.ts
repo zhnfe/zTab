@@ -1,5 +1,5 @@
 import type { Reactive, Ref } from 'vue'
-import { isRef, reactive, ref, watch } from 'vue'
+import { isRef, reactive, ref, toRaw, watch } from 'vue'
 
 function watchTarget(key: string, target: Reactive<unknown> | Ref<unknown>) {
     let timer = 0
@@ -8,7 +8,8 @@ function watchTarget(key: string, target: Reactive<unknown> | Ref<unknown>) {
         () => {
             clearTimeout(timer)
             timer = setTimeout(() => {
-                chrome.storage.local.set({ [key]: isRef(target) ? target.value : target })
+                const raw = toRaw(isRef(target) ? target.value : target)
+                chrome.storage.local.set({ [key]: raw })
             }, 500)
         },
         { deep: true }

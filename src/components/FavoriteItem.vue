@@ -1,6 +1,6 @@
 <template>
     <div
-        v-for="item in favorites"
+        v-for="item in favorateBookmarks"
         :key="item.id"
         draggable="true"
         class="xy-center bg-base-content/10 hover:bg-base-content/20 rounded-xl cursor-pointer"
@@ -14,20 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import type { BookmarkNode } from '@/utils/serviceWorker'
-import { computed } from 'vue'
-import { favorite, flattedBookmarks, generateContextMenuItems, getFavicon, useContextMenu } from '@/utils'
+import { favorateBookmarks, generateContextMenuItems, getFavicon, useContextMenu } from '@/utils'
 
-const favorites = computed(() => {
-    const favoriteIds: string[] = favorite.get()
-    return favoriteIds.reduce<BookmarkNode[]>((acc, id) => {
-        const node = flattedBookmarks.value.find(b => b.id === id)
-        if (node) {
-            acc.push(node)
-        }
-        return acc
-    }, [])
-})
 const handleClick = (item: chrome.bookmarks.BookmarkTreeNode) => {
     chrome.tabs.create({ url: item.url })
 }

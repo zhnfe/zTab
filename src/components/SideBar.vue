@@ -5,7 +5,7 @@
         </div>
         <ul class="menu w-full flex-nowrap flex-1 mt-5 overflow-y-auto">
             <li
-                v-for="item, index in bookmarks"
+                v-for="item, index in normalBookmarks"
                 :key="item.id"
             >
                 <SideItem
@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { onMounted, provide, ref, useTemplateRef } from 'vue'
-import { bookmarks } from '@/utils'
+import { normalBookmarks } from '@/utils'
 import FavoriteItem from './FavoriteItem.vue'
 import SetupDialog from './SetupDialog.vue'
 import SideItem from './SideItem.vue'

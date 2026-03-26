@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import type { BookmarkNode } from '@/utils/serviceWorker'
 import { onMounted, reactive, ref } from 'vue'
-import { initBookmarks, isBookmarkFolder } from '@/utils'
+import { getBookmarks, isBookmarkFolder } from '@/utils'
 import Modal from './Modal.vue'
 
 export interface BookmarkFormProps {
@@ -73,7 +73,7 @@ const onSubmit = async (e: SubmitEvent) => {
     }
     alert(`${title}成功`)
     visible.value = false
-    initBookmarks()
+    getBookmarks()
 }
 onMounted(() => {
     visible.value = true

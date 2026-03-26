@@ -1,5 +1,6 @@
 import type { BookmarkNode, MessageRequest, MessageResponse } from './serviceWorker'
 import { computed, ref } from 'vue'
+import { useStorage } from '@/composables'
 
 /**
  * 发送消息，无返回值处理
@@ -34,16 +35,40 @@ function sendMessage<T extends keyof Omit<MessageResponse, 'code' | 'message'>>(
     return promise as Promise<undefined | NonNullable<MessageResponse[T]>>
 }
 
-export const isBookmarkFolder = (item: BookmarkNode) => 'children' in item
+export const isBookmarkFolder = (item: BookmarkNode): item is BookmarkNode & { children: BookmarkNode[] } => Array.isArray(item.children)
 
-export const bookmarks = ref<BookmarkNode[]>([])
+const allBookmarks = ref<BookmarkNode[]>([])
+export const favorateBookmarks = useStorage<BookmarkNode[]>('bookmark/favorates', [])
+function filterFavorate(nodes: BookmarkNode[], favIds: Set<string>): BookmarkNode[] {
+    return nodes
+        .filter(node => !favIds.has(node.id))
+        .map((node) => {
+            if (isBookmarkFolder(node)) {
+                return {
+                    ...node,
+                    children: filterFavorate(node.children, favIds)
+                }
+            }
+            return node
+        })
+}
+// 3. 核心：自动过滤后的书签树
+export const normalBookmarks = computed(() => {
+    const favIds = new Set(favorateBookmarks.value.map(f => f.id))
+    return filterFavorate(allBookmarks.value, favIds)
+})
 
-export function initBookmarks() {
+// 4. 初始化函数（仅负责拉取数据）
+export function getBookmarks() {
     chrome.runtime.sendMessage({ action: 'getBookmark' }, (res: MessageResponse) => {
-        bookmarks.value = res.bookmarks ?? []
+        allBookmarks.value = res.bookmarks ?? []
     })
 }
-initBookmarks()
+getBookmarks()
+
+export function deleteFavorate(node: BookmarkNode) {
+    favorateBookmarks.value = favorateBookmarks.value.filter(item => item.id !== node.id)
+}
 
 /** 不包含文件夹并且没有层级的书签 */
 export const flattedBookmarks = computed(() => {
@@ -59,7 +84,7 @@ export const flattedBookmarks = computed(() => {
             }
         }
     }
-    _flat(bookmarks.value)
+    _flat(allBookmarks.value)
     return result as Array<BookmarkNode & { url: string }>
 })
 export function updateTab(tabId: number, option: chrome.tabs.UpdateProperties) {
@@ -72,7 +97,8 @@ export function deleteBookmark(bookmark: BookmarkNode) {
     const api = bookmark.children ? 'removeTree' : 'remove'
     if (confirm('确定删除吗?')) {
         chrome.bookmarks[api](bookmark.id)
-        initBookmarks()
+        deleteFavorate(bookmark)
+        getBookmarks()
     }
 }
 
@@ -93,22 +119,4 @@ export function getFavicon(u?: string) {
     url.searchParams.set('pageUrl', u)
     url.searchParams.set('size', '64')
     return url.toString()
-}
-
-export const favorite = {
-    ids: [] as string[],
-    get(): string[] {
-        return JSON.parse(localStorage.getItem('favoriteIds') ?? '[]')
-    },
-    set(ids: string[]) {
-        localStorage.setItem('favoriteIds', JSON.stringify([...new Set(ids)]))
-    },
-    add(id: string) {
-        const ids = [...this.get(), id]
-        this.set(ids)
-    },
-    delete(id: string) {
-        const current = this.get()
-        this.set(current.filter(item => item !== id))
-    }
 }

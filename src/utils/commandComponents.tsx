@@ -3,7 +3,7 @@ import type { BookmarkFormProps } from '@/components/BookmarkForm.vue'
 import { render } from 'vue'
 import BookmarkForm from '@/components/BookmarkForm.vue'
 import ContextMenu from '@/components/ContextMenu.vue'
-import { deleteBookmark, favorite, initBookmarks, isBookmarkFolder } from '.'
+import { deleteBookmark, deleteFavorate, favorateBookmarks, getBookmarks, isBookmarkFolder } from '.'
 
 export function modifyBookmark(props: BookmarkFormProps) {
     const div = document.createElement('div')
@@ -107,12 +107,12 @@ export function generateContextMenuItems(bookmark: BookmarkNode, isFavorite?: bo
             icon: () => import('~vic/IconStar'),
             onClick() {
                 if (isFavorite) {
-                    favorite.delete(bookmark.id)
+                    deleteFavorate(bookmark)
                 }
                 else {
-                    favorite.add(bookmark.id)
+                    favorateBookmarks.value.push(bookmark)
                 }
-                initBookmarks()
+                getBookmarks()
             }
         },
         {
