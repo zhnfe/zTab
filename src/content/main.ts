@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import css from '@/index.css?inline'
 import App from './Content.vue'
-import '@/store'
 
 console.info('ztab...')
 

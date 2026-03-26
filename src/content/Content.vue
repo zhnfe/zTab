@@ -4,18 +4,21 @@
             v-if="visible"
             ref="modal"
             class="fixed inset-0 z-9999 origin-top flex justify-center"
-            :class="themeClass"
             :style="style"
             @click="close"
         >
-            <MainSearch class="main-content" />
+            <MainSearch
+                :data-theme="theme[0]"
+                class="main-content"
+            />
         </div>
     </transition>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, reactive, ref, useTemplateRef } from 'vue'
 import MainSearch from '@/components/MainSearch.vue'
+import { getThemeValue } from '@/store/setup'
 
 const visible = ref(false)
 const modal = useTemplateRef('modal')
@@ -37,27 +40,11 @@ const style = reactive({
     scale: '',
     paddingTop: ''
 })
-const themeClass = ref('')
+
+const theme = computed(getThemeValue)
 onMounted(() => {
     const scale = 16 / Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
     style.scale = scale.toString()
     style.paddingTop = `${25 / scale}vh`
-
-    // toggle dark or light
-    const drakScheme = matchMedia('(prefers-color-scheme: dark)')
-    if (drakScheme.matches) {
-        themeClass.value = 'dark'
-    }
-    drakScheme.addEventListener('change', (e: MediaQueryListEvent) => {
-        if (e.matches) {
-            themeClass.value = 'dark'
-        }
-    })
-    const lightScheme = matchMedia('(prefers-color-scheme: light)')
-    lightScheme.addEventListener('change', (e: MediaQueryListEvent) => {
-        if (e.matches) {
-            themeClass.value = ''
-        }
-    })
 })
 </script>

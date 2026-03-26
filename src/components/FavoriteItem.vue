@@ -16,9 +16,7 @@
 <script setup lang="ts">
 import type { BookmarkNode } from '@/utils/serviceWorker'
 import { computed } from 'vue'
-import { favorite, getFavicon } from '@/utils'
-import { flattedBookmarks } from '@/utils/chromeApi'
-import { generateContextMenuItems, useContextMenu } from '@/utils/commandComponents'
+import { favorite, flattedBookmarks, generateContextMenuItems, getFavicon, useContextMenu } from '@/utils'
 
 const favorites = computed(() => {
     const favoriteIds: string[] = favorite.get()

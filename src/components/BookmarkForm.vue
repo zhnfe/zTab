@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import type { BookmarkNode } from '@/utils/serviceWorker'
 import { onMounted, reactive, ref } from 'vue'
-import { initBookmarks, isBookmarkFolder } from '@/utils/chromeApi'
+import { initBookmarks, isBookmarkFolder } from '@/utils'
 import Modal from './Modal.vue'
 
 export interface BookmarkFormProps {

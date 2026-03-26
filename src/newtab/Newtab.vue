@@ -1,18 +1,18 @@
 <template>
     <div
-        class="grid grid-cols-[1fr_4px]"
+        class="relative"
         :style="{
-            width: `${setting.sidebar.width}px`,
+            width: `${sidebarWidth}px`,
         }"
     >
         <SideBar />
         <div
-            class="rounded-full cursor-col-resize hover:bg-primary transition-colors"
-            :class="resizerBg"
+            class="absolute inset-y-3 right-0 w-1 rounded-full cursor-col-resize transition-colors delay-150"
+            :class="[resizerBg, `hover:${bg}`]"
             @mousedown="handleResize"
         />
     </div>
-    <div class="relative rounded-lg" :style="{ backgroundImage: `url(${setting.bgImage})` }">
+    <div class="relative rounded-lg m-3 ml-0" :style="{ background: `var(--color-base-300) url(${newtabBgImage}) center/cover` }">
         <MainSearch />
     </div>
 </template>
@@ -21,20 +21,21 @@
 import { ref } from 'vue'
 import MainSearch from '@/components/MainSearch.vue'
 import SideBar from '@/components/SideBar.vue'
-import { setting } from '@/store'
+import { newtabBgImage, sidebarWidth } from '@/store/setup'
 
-const resizerBg = ref<'' | 'bg-primary'>('')
+const bg = 'bg-info'
+const resizerBg = ref<'' | typeof bg>('')
 const handleResize = (e: MouseEvent) => {
-    resizerBg.value = 'bg-primary'
+    resizerBg.value = bg
     const controller = new AbortController()
     const { signal } = controller
 
     const startX = e.x
-    const startWidth = setting.sidebar.width
+    const startWidth = sidebarWidth.value
 
     window.addEventListener('mousemove', (e) => {
         const dx = e.x - startX
-        setting.sidebar.width = startWidth + dx
+        sidebarWidth.value = startWidth + dx
     }, { signal })
 
     window.addEventListener('mouseup', () => {

@@ -1,6 +1,6 @@
 <template>
-    <aside class="py-5 select-none overflow-hidden flex flex-col relative max-h-screen">
-        <div class="grid grid-autofill-90 grid-auto-rows-48 gap-2 px-2">
+    <aside class="h-screen pt-5 select-none flex flex-col relative">
+        <div class="grid grid-autofit-80 grid-auto-rows-48 gap-2 px-2">
             <FavoriteItem />
         </div>
         <ul class="menu w-full flex-nowrap flex-1 mt-5 overflow-y-auto">
@@ -13,22 +13,32 @@
                     :indexes="[index]"
                 />
             </li>
+            <li ref="scrollSentinel" class="invisible" />
         </ul>
+        <footer :class="showFooterShadow ? 'border-t-base-200 border-t' : ''">
+            <div class="h-10 y-center px-2 *:p-2 *:leading-none *:cursor-pointer *:rounded-md *:hover:bg-base-300">
+                <div class="ml-auto" @click="handleSetup">
+                    <IconSettings />
+                </div>
+            </div>
+        </footer>
         <div
             ref="divider"
-            class="absolute top-0 h-0.5 opacity-0 ml-4.5 flex items-center"
+            class="absolute top-0 h-0.5 opacity-0 ml-4.5 y-center"
             style="width: calc(100% - 18px - 8px);"
         >
             <div class="h-2 w-2 rounded-full bg-red-600" />
             <div class="h-full flex-1 bg-red-600" />
         </div>
+        <SetupDialog v-model="setupVisible" />
     </aside>
 </template>
 
 <script setup lang="ts">
-import { provide, useTemplateRef } from 'vue'
-import { bookmarks } from '@/utils/chromeApi'
+import { onMounted, provide, ref, useTemplateRef } from 'vue'
+import { bookmarks } from '@/utils'
 import FavoriteItem from './FavoriteItem.vue'
+import SetupDialog from './SetupDialog.vue'
 import SideItem from './SideItem.vue'
 
 const divider = useTemplateRef('divider')
@@ -45,4 +55,19 @@ provide('handleDevider', (type: 'hide' | 'move', y?: number) => {
         divider.value.style.translate = `0 ${y}px`
     }
 })
+
+const showFooterShadow = ref(false)
+const scrollSentinel = useTemplateRef('scrollSentinel')
+
+onMounted(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+        showFooterShadow.value = !entry?.isIntersecting
+    })
+    observer.observe(scrollSentinel.value!)
+})
+
+const setupVisible = ref(false)
+const handleSetup = () => {
+    setupVisible.value = true
+}
 </script>

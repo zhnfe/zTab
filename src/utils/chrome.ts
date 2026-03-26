@@ -83,3 +83,32 @@ export function getHistory(query: chrome.history.HistoryQuery) {
 export function getTab() {
     return sendMessage({ action: 'getTab' }, 'tabs', [])
 }
+
+/** 获取链接图标 */
+export function getFavicon(u?: string) {
+    if (!u) {
+        return ''
+    }
+    const url = new URL(chrome.runtime.getURL('/_favicon/'))
+    url.searchParams.set('pageUrl', u)
+    url.searchParams.set('size', '64')
+    return url.toString()
+}
+
+export const favorite = {
+    ids: [] as string[],
+    get(): string[] {
+        return JSON.parse(localStorage.getItem('favoriteIds') ?? '[]')
+    },
+    set(ids: string[]) {
+        localStorage.setItem('favoriteIds', JSON.stringify([...new Set(ids)]))
+    },
+    add(id: string) {
+        const ids = [...this.get(), id]
+        this.set(ids)
+    },
+    delete(id: string) {
+        const current = this.get()
+        this.set(current.filter(item => item !== id))
+    }
+}

@@ -1,17 +1,19 @@
 <template>
-    <Transition
-        name="modal"
-        @after-leave="$emit('close')"
-    >
-        <div
-            v-if="visible"
-            ref="wrapper"
-            class="fixed inset-0 w-full h-full xy-center bg-black/40 z-999"
-            @click="handleClick"
+    <Teleport to="body">
+        <Transition
+            name="modal"
+            @after-leave="$emit('close')"
         >
-            <slot />
-        </div>
-    </Transition>
+            <div
+                v-if="visible"
+                ref="wrapper"
+                class="fixed inset-0 w-full h-full xy-center bg-black/40 z-999"
+                @click="handleClick"
+            >
+                <slot />
+            </div>
+        </Transition>
+    </Teleport>
 </template>
 
 <script setup lang="ts">

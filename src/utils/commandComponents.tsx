@@ -2,18 +2,15 @@ import type { BookmarkNode } from './serviceWorker'
 import type { BookmarkFormProps } from '@/components/BookmarkForm.vue'
 import { render } from 'vue'
 import BookmarkForm from '@/components/BookmarkForm.vue'
-import ContenxtMenu from '@/components/ContenxtMenu.vue'
-import { favorite } from '.'
-import { deleteBookmark, initBookmarks, isBookmarkFolder } from './chromeApi.ts'
+import ContextMenu from '@/components/ContextMenu.vue'
+import { deleteBookmark, favorite, initBookmarks, isBookmarkFolder } from '.'
 
 export function modifyBookmark(props: BookmarkFormProps) {
-    console.log(props.data)
-
     const div = document.createElement('div')
 
     const close = () => {
-        render(null, div) // ✅ 先通知 Vue 卸载，触发 onUnmounted
-        div.remove() // 再移除 DOM
+        render(null, div)
+        div.remove()
     }
 
     const vm = <BookmarkForm {...props} onClose={close} />
@@ -155,7 +152,7 @@ export function useContextMenu(position: { x: number, y: number }, items: Contex
         render(null, div)
         div.remove()
     }
-    const vm = <ContenxtMenu items={items} position={position} onClose={close} />
+    const vm = <ContextMenu items={items} position={position} onClose={close} />
     render(vm, div)
     document.body.appendChild(div)
 }

@@ -1,6 +1,6 @@
 <template>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-40 card bg-base-100 p-3 text-base w-180 no-offset-shadow-150">
-        <div class="flex items-center h-11 px-3 gap-3">
+    <div class="card bg-base-100 p-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-40 w-180 no-offset-shadow-150">
+        <div class="y-center h-11 px-3 gap-3">
             <IconSearch />
             <input
                 ref="searchInput"
@@ -20,7 +20,7 @@
             <div
                 v-for="item, index in result"
                 :key="item.url"
-                class="flex items-center gap-3 rounded-md p-3 mb-1 text-sm cursor-pointer hover:bg-accent hover:text-accent-content"
+                class="y-center gap-3 rounded-md p-3 mb-1 text-sm cursor-pointer hover:bg-accent hover:text-accent-content"
                 :style="index === state.curIndex
                     ? {
                         backgroundColor: 'var(--color-primary)',
@@ -54,8 +54,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, useTemplateRef, watch } from 'vue'
-import { getFavicon } from '@/utils'
-import { createTab, flattedBookmarks, getHistory, getTab, updateTab } from '@/utils/chromeApi'
+import { createTab, flattedBookmarks, getFavicon, getHistory, getTab, updateTab } from '@/utils'
 
 const searchEngines = [
     {

@@ -16,7 +16,7 @@ export default defineConfig(({ command }) => {
     const baseConfig: UserConfig = {
         resolve: {
             alias: {
-                '@': `${path.resolve(__dirname, 'src')}`
+                '@': path.resolve(__dirname, 'src')
             }
         },
         plugins: [
@@ -55,7 +55,6 @@ export default defineConfig(({ command }) => {
         baseConfig.css = {
             postcss: {
                 plugins: [
-                // 内联 PostCSS 插件，解包所有 @supports
                     {
                         postcssPlugin: 'unwrap-supports',
                         AtRule: {

@@ -48,10 +48,7 @@
 <script setup lang="ts">
 import type { BookmarkNode } from '@/utils/serviceWorker'
 import { computed, ref } from 'vue'
-import { getFavicon } from '@/utils'
-import { isBookmarkFolder } from '@/utils/chromeApi'
-import { generateContextMenuItems, useContextMenu } from '@/utils/commandComponents'
-import { dragState } from '@/utils/drag'
+import { dragState, generateContextMenuItems, getFavicon, isBookmarkFolder, useContextMenu } from '@/utils'
 
 const props = withDefaults(defineProps<Props>(), {})
 interface Props {

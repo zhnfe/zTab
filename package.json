@@ -16,7 +16,8 @@
         "postinstall": "simple-git-hooks"
     },
     "dependencies": {
-        "@material-symbols/svg-400": "^0.36.4",
+        "@material-symbols/svg-400": "^0.42.3",
+        "@vueuse/core": "^14.2.1",
         "vue": "^3.5.30"
     },
     "devDependencies": {

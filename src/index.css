@@ -12,26 +12,26 @@
     }
 }
 
+@utility y-center {
+    display: flex;
+    align-items: center;
+}
+@utility x-center {
+    display: flex;
+    justify-content: center;
+}
 @utility xy-center {
-    @apply flex items-center justify-center;
-}
-:root,
-.main-content {
-    --no-offset-shadow-opacity: 60%;
-}
-@media (prefers-color-scheme: dark) {
-    :root,
-    .main-content {
-        --no-offset-shadow-opacity: 15%;
-    }
-}
-@utility no-offset-shadow-* {
-    box-shadow: 0 0 calc(--value(integer) * 1px)
-        color-mix(in oklab, var(--color-base-content) var(--no-offset-shadow-opacity), transparent);
+    @apply y-center x-center;
 }
 
+@utility no-offset-shadow-* {
+    box-shadow: 0 0 calc(--value(integer) * 1px) color-mix(in oklab, var(--color-base-content) 50%, transparent);
+}
 @utility grid-autofill-* {
     grid-template-columns: repeat(auto-fill, minmax(calc(--value(integer) * 1px), 1fr));
+}
+@utility grid-autofit-* {
+    grid-template-columns: repeat(auto-fit, minmax(calc(--value(integer) * 1px), 1fr));
 }
 @utility grid-auto-rows-* {
     grid-auto-rows: calc(--value(integer) * 1px);
@@ -40,7 +40,10 @@
 @utility line-clamp-* {
     text-overflow: ellipsis;
 }
-
+body {
+    font-family: inherit;
+    font-size: inherit;
+}
 body::after {
     content: '';
     position: absolute;
@@ -74,6 +77,7 @@ body::after {
     scale: 1;
 }
 
+/* daisyui override */
 .menu-dropdown {
     display: block;
     interpolate-size: allow-keywords;
@@ -83,4 +87,12 @@ body::after {
 }
 .menu-dropdown-show {
     height: auto;
+}
+:is(.select, .select select) option.no-padding {
+    padding-inline: 0;
+}
+:is(.select:has(option.no-padding))::picker(select) {
+    padding: 0;
+    border: none;
+    @apply shadow;
 }

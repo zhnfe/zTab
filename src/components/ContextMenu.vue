@@ -9,7 +9,7 @@
         >
             <div
                 v-if="'title' in item"
-                class="flex items-center min-w-50 hover:menu-active"
+                class="y-center min-w-50 hover:menu-active"
                 @click="item.onClick"
             >
                 <component :is="getIcon(item)" />
@@ -20,10 +20,9 @@
     </ul>
 </template>
 
-<script setup lang="ts">
-import type { ContextItem } from '@/utils/commandComponents'
+<script setup lang="tsx">
+import type { ContextItem } from '@/utils'
 import { defineAsyncComponent } from 'vue'
-import IconHourglassBottom from '~vic/IconHourglassBottom'
 
 interface Props {
     items: ContextItem[]
@@ -34,11 +33,12 @@ interface Props {
 }
 defineProps<Props>()
 const emit = defineEmits(['close'])
+const Loading = () => <span class="loading loading-spinner loading-xs"></span>
 const getIcon = (item: Extract<ContextItem, { title: string }>) => {
     return defineAsyncComponent({
         loader: item.icon,
-        loadingComponent: IconHourglassBottom,
-        delay: 200
+        loadingComponent: Loading,
+        delay: 0
     })
 }
 document.addEventListener('click', () => emit('close'), { once: true, capture: true })
