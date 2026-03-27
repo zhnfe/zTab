@@ -15,7 +15,6 @@ export function modifyBookmark(props: BookmarkFormProps) {
 
     const vm = <BookmarkForm {...props} onClose={close} />
     render(vm, div)
-    document.body.appendChild(div)
 }
 export type ContextItem
     = | {

@@ -30,7 +30,9 @@
             <div class="h-2 w-2 rounded-full bg-red-600" />
             <div class="h-full flex-1 bg-red-600" />
         </div>
-        <SetupDialog v-model="setupVisible" />
+        <Modal v-model="setupVisible">
+            <Setup />
+        </Modal>
     </aside>
 </template>
 
@@ -38,7 +40,8 @@
 import { onMounted, provide, ref, useTemplateRef } from 'vue'
 import { normalBookmarks } from '@/utils'
 import FavoriteItem from './FavoriteItem.vue'
-import SetupDialog from './SetupDialog.vue'
+import Modal from './Modal.vue'
+import Setup from './Setup.vue'
 import SideItem from './SideItem.vue'
 
 const divider = useTemplateRef('divider')

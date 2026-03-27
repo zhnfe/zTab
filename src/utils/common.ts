@@ -1,7 +1,3 @@
-export function getRandomColor() {
-    return `#${Math.floor(Math.random() * 16777215).toString(16)}`
-}
-
 /**
  * 扁平化数组对象
  * @param array - 原数组
@@ -74,24 +70,4 @@ class MakeOptions<const T extends KeyOption[]> {
  */
 export function makeOptions<const T extends KeyOption[]>(options: T) {
     return new MakeOptions(options) as MakeOptions<T> & KeyValueOptionMap<T>
-}
-
-/** 单卡片预览 */
-export function getPreviewUrl(params: {
-    /** 获取平台数据接口 */
-    api: string
-    /** 卡片模板名 */
-    tpl: string
-    /** 召回 query */
-    word: string
-    /** 在 ocp 中定义处理 api 数据的函数 */
-    handler?: string
-    sicpServer?: string
-}, upToDate = true) {
-    const paramsStr = new URLSearchParams({
-        ...params,
-        api: encodeURIComponent(params.api),
-        timeStamp: upToDate ? Date.now().toString() : ''
-    }).toString()
-    return `/ocp/template/previewNew?${paramsStr}`
 }
